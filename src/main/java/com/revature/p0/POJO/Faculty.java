@@ -12,7 +12,8 @@ public class Faculty {
     String lastName;
     String username;
     String password;
-    
+
+
 
 
 }
