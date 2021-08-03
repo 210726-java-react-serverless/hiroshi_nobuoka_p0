@@ -7,10 +7,14 @@ public class NameQuestion extends Question{
         super(string);
     }
     public boolean validAnswer(String answer){
-        if(answer.trim().equals("")||answer.isEmpty())
+        if(answer.trim().equals("")||answer.isEmpty()){
+            System.out.println("Cannot be empty.\n");
             return false;
-        if(!answer.matches("[a-z]"))
+        }
+        if(!answer.matches("[a-z]")) {
+            System.out.println("Only names with English letters are considered valid. Please try again.\n");
             return false;
+        }
         return true;
     }
 }
