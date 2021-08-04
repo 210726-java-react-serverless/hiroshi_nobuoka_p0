@@ -1,8 +1,5 @@
 package com.revature.p0.screens;
 
-import com.revature.p0.respositries.Repository;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 
 public abstract class Screen {
@@ -17,4 +14,11 @@ public abstract class Screen {
 
     public abstract void render() throws IOException;
 
+    public String getName() {
+        return name;
+    }
+
+    public String getRoute() {
+        return route;
+    }
 }

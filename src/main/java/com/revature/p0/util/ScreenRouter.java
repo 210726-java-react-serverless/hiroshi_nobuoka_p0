@@ -6,15 +6,21 @@ import java.util.Set;
 
     public class ScreenRouter implements Router<Screen> {
 
-        private String currentScreen;
+        private Screen currentScreen;
         private Set<Screen> screens = new HashSet<>();
 
-        public void add(){};
-        public void changeCurrent(String route){};
-        public void getCurrent(){};
+        public void add(Screen screen){
+            screens.add(screen);
+        };
+        public void changeCurrent(String route){
+            for(Screen screen: screens)
+                if(screen.getRoute().equals(route)) {
+                    this.currentScreen = screen;
+                    break;
+                }
+        };
+        public Screen getCurrent(){
+            return currentScreen;
+        };
 
-
-
-
-    }
 }
