@@ -2,7 +2,7 @@ package com.revature.p0.respositries;
 
 import com.revature.p0.POJO.Student;
 
-public class StudentRepository extends Repository implements CRUD_Repository<Student> {
+public class StudentRepository extends Repository<Student> implements CRUD_Repository<Student> {
 
     @Override
     public Student search(Student type) {
