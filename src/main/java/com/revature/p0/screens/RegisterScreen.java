@@ -1,25 +1,34 @@
 package com.revature.p0.screens;
 
-import com.revature.p0.questions.EduQuestion;
-import com.revature.p0.questions.EmailQuestion;
-import com.revature.p0.questions.NameQuestion;
-import com.revature.p0.questions.Question;
+import com.revature.p0.questions.*;
+import com.revature.p0.respositries.Repository;
 
 public class RegisterScreen extends Screen {
     protected String name;
     protected String route;
+    protected Repository repo;
 
-    public RegisterScreen(){
-        super("Register Screen", "/register");
+    public RegisterScreen(Repository repo){
+        super("Register Screen", "/register", repo);
     }
 
     public void render(){
+
         Question[] qArray = {
-                new EduQuestion(),
+                //new EduQuestion(),
                 new NameQuestion("What is your first name?"),
                 new NameQuestion("What is your last name?"),
                 new EmailQuestion(),
+                new UsernameQuestion(),
+                new PasswordQuestion()
+        }
 
+        for(Question q: qArray){
+            System.out.println(q.question);
+            String answer = reader.readLine();
+            while(!q.validAnswer(answer)) {
+                reader.readLine();
+            }
         }
         //Probably won't use below code, but keeping just in case.
        /* String[] regInfoArray = new String[6];

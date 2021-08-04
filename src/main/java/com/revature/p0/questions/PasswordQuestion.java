@@ -1,7 +1,7 @@
 package com.revature.p0.questions;
 
 public class PasswordQuestion extends Question{
-    protected String question;
+    public String question;
 
     public PasswordQuestion(){
         super("Create a password. Your password must be at least 6 characters in length and include at least one special character.");

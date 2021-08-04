@@ -1,7 +1,7 @@
 package com.revature.p0.questions;
 
 public abstract class Question{
-    protected String question;
+    public String question;
 
     public Question(String question){
         this.question= question;

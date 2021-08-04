@@ -1,7 +1,7 @@
 package com.revature.p0.questions;
 
 public class EmailQuestion extends Question{
-    protected String question;
+    public String question;
 
     public EmailQuestion(){
         super("What is your email address?");
