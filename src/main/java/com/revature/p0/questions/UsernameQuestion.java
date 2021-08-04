@@ -10,7 +10,6 @@ public class UsernameQuestion extends Question{
     public UsernameQuestion(String question) {super(question);}
 
     public boolean validAnswer(String answer){
-
         if(answer.trim().equals("")||answer.isEmpty()) {
             System.out.println("Cannot be empty.\n");
             return false;

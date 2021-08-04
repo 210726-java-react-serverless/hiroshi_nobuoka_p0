@@ -10,13 +10,13 @@ public class Student{
     String username;
     String password;
 
-    public Student(String edu, String firstName, String lastName, String email, String username, String password) {
-        this.edu = edu;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
+    public Student(String[] studentInfo) {
+        this.edu = studentInfo[0];
+        this.firstName = studentInfo[1];
+        this.lastName = studentInfo[2];
+        this.email = studentInfo[3];
+        this.username = studentInfo[4];
+        this.password = studentInfo[5];
     }
 
     public String getEdu() {

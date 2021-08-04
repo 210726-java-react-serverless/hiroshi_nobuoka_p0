@@ -29,12 +29,10 @@ public class AppState {
             edu = reader.readLine();
 
         if(edu.equals("student"))
-            screenRouter.addScreens(
-
-
-            )
+            screenRouter.add(new WelcomeScreen(screenRouter, reader)
+                    .add(new )
         else
-            screenRouter.addScreens(
+            screenRouter.add(
 
 
             )

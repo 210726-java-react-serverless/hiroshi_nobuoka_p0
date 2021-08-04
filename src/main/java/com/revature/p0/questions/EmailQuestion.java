@@ -3,8 +3,8 @@ package com.revature.p0.questions;
 public class EmailQuestion extends Question{
     public String question;
 
-    public EmailQuestion(){
-        super("What is your email address?");
+    public EmailQuestion(String question){
+        super(question);
     }
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()) {
