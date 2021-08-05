@@ -8,10 +8,10 @@ public abstract class Repository<T> {
         this.name = name;
         this.route = route;
     }
-    abstract void create();
-    abstract T search(T type);
-    abstract T update(T type);
-    abstract void delete(T type);
+
+    public abstract T search(T type);
+    public abstract void save(T type);
+    public abstract boolean exists(String thing);
 
     public String getName() {
         return name;

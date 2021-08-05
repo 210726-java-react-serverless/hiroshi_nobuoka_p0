@@ -1,13 +1,20 @@
 package com.revature.p0.questions;
 
 import com.revature.p0.respositries.Repository;
+import com.revature.p0.respositries.StudentRepository;
 
 public class UsernameQuestion extends Question{
-    public String question;
-    public Repository repo;
+    private String question;
+    private Repository repo;
 
 
-    public UsernameQuestion(String question) {super(question);}
+    public UsernameQuestion(String question, Repository repo) {
+        super(question);
+        if(repo.name.equals("student"))
+            this.repo = (StudentRepository) repo;
+        if(repo.name.equals("faculty"))
+            this.repo = (FacultyRepository) repo;
+    }
 
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()) {
@@ -15,7 +22,7 @@ public class UsernameQuestion extends Question{
             return false;
         }
         //log here
-        if(!repo.search()) {
+        if(!repo.exists(answer)) {
             System.out.println("Username is already taken.\n");
             return false;
         }

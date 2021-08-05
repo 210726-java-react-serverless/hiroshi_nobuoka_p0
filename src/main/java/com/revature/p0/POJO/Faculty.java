@@ -3,21 +3,10 @@ package com.revature.p0.POJO;
 
 import java.util.Objects;
 
-public class Faculty {
-    String edu;
-    String firstName;
-    String lastName;
-    String email;
-    String username;
-    String password;
+public class Faculty extends User{
 
-    public Faculty(String edu, String firstName, String lastName, String email, String username, String password) {
-        this.edu = edu;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
+    public Faculty(String[] studentInfo) {
+        super(new String[] {"faculty", studentInfo[0],studentInfo[1],studentInfo[2],studentInfo[3],studentInfo[4]});
     }
 
     public String getFirstName() {
