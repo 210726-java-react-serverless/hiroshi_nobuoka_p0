@@ -15,4 +15,12 @@ public class NameQuestion extends Question{
         }
         return true;
     }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
 }
