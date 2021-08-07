@@ -1,7 +1,7 @@
-package com.revature.p0.respositries;
+package com.revature.p0.repositories;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.lang.NonNull;
+import com.mongodb.client.model.Filters;
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.exceptions.DataSourceException;
 import com.revature.p0.exceptions.NullFieldException;
@@ -44,27 +44,36 @@ public class UserRepository implements CrudRepository<AppUser>{
 
 
     public AppUser findUserByUsername(String username){
-
+        try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
             MongoDatabase projectDb = mongoClient.getDatabase("Project Zero");
-            if(projectDb == null)
-                throw new DataSourceException("Project not found.", new NullPointerException());
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
             Document queryDoc = userCollection.find(new BasicDBObject("username", username)).first();
-            if(queryDoc == null)
-                throw new DataSourceException("Couldn't find username in collection", new NullPointerException());
 
             return new AppUser(session.getEducation(), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
                     queryDoc.get("username").toString(), queryDoc.get("password").toString());
-
+        } catch (NullPointerException npe){
+            npe.printStackTrace();
+            throw new DataSourceException("Database, collection, or username not found", npe);
+        }
     }
 
-    public AppUser findUserByEmail(String email){
-        return null;
+    public AppUser findUserByEmail(String email) {
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            MongoDatabase projectDb = mongoClient.getDatabase("Project Zero");
+            MongoCollection<Document> userCollection = chooseCollection(projectDb);
+
+            Document queryDoc = userCollection.find(new BasicDBObject("email", email)).first();
+            return new AppUser(session.getEducation(), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
+                    queryDoc.get("username").toString(), queryDoc.get("password").toString());
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+            throw new DataSourceException("Database or colletion not found", npe);
+        }
     }
 
-    @NonNull
     public MongoCollection<Document> chooseCollection(MongoDatabase db){
         try {
             MongoCollection<Document> userCollection;
@@ -84,7 +93,18 @@ public class UserRepository implements CrudRepository<AppUser>{
 
     @Override
     public AppUser findById(String id) {
-        return null;
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            MongoDatabase projectDb = mongoClient.getDatabase("Project Zero");
+            MongoCollection<Document> userCollection = chooseCollection(projectDb);
+
+            Document queryDoc = userCollection.find(new BasicDBObject("_id", id)).first();//TODO key may be incorrect, make sure to test
+            return new AppUser(session.getEducation(), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
+                    queryDoc.get("username").toString(), queryDoc.get("password").toString());
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+            throw new DataSourceException("Database or colletion not found", npe);
+        }
     }
 
     @Override
@@ -106,12 +126,22 @@ public class UserRepository implements CrudRepository<AppUser>{
     }
 
     @Override
-    public boolean update(AppUser user) {
-        return false;
+    public void update(AppUser user) {
+        MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+        MongoDatabase projectDb = mongoClient.getDatabase("Project Zero");
+        MongoCollection<Document> userCollection = chooseCollection(projectDb);
+
+
+
     }
 
     @Override
-    public boolean deleteById(int id) {
-        return false;
+    public void deleteById(int id) {
+        MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+        MongoDatabase projectDb = mongoClient.getDatabase("Project Zero");
+        MongoCollection<Document> userCollection = chooseCollection(projectDb);
+
+        userCollection.deleteOne(Filters.eq("_id", id));
+        System.out.println("Document deleted successfully.");
     }
 }
