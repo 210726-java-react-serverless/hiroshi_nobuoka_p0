@@ -1,5 +1,7 @@
 package com.revature.p0.respositries;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.lang.NonNull;
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.exceptions.DataSourceException;
 import com.revature.p0.exceptions.NullFieldException;
@@ -20,7 +22,7 @@ public class UserRepository implements CrudRepository<AppUser>{
     public AppUser findUserByCredentials(String username, String password){
 
         try{
-            MongoCollection<Document> userCollection = openProjectZero();
+            MongoCollection<Document> userCollection = chooseCollection();
             Document queryDoc = new Document("username", username).append("password", password);
             Document authStudentDoc = userCollection.find(queryDoc).first();
 
@@ -42,24 +44,36 @@ public class UserRepository implements CrudRepository<AppUser>{
 
 
     public AppUser findUserByUsername(String username){
-        return null;
+
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            MongoDatabase projectDb = mongoClient.getDatabase("Project Zero");
+            if(projectDb == null)
+                throw new DataSourceException("Project not found.", new NullPointerException());
+            MongoCollection<Document> userCollection = chooseCollection(projectDb);
+
+            Document queryDoc = userCollection.find(new BasicDBObject("username", username)).first();
+            if(queryDoc == null)
+                throw new DataSourceException("Couldn't find username in collection", new NullPointerException());
+
+            return new AppUser(session.getEducation(), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
+                    queryDoc.get("username").toString(), queryDoc.get("password").toString());
+
     }
 
     public AppUser findUserByEmail(String email){
         return null;
     }
 
-    public MongoCollection<Document> openProjectZero(){
+    @NonNull
+    public MongoCollection<Document> chooseCollection(MongoDatabase db){
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase projectDatabase = mongoClient.getDatabase("Project Zero");
             MongoCollection<Document> userCollection;
 
             //Refers to the active user's education to determine which collection to query
             if (session.getEducation().equals(AppUser.Edu.STUDENT))
-                return userCollection = projectDatabase.getCollection("student");
+                return userCollection = db.getCollection("student");
             else if (session.getEducation().equals(AppUser.Edu.FACULTY))
-                return userCollection = projectDatabase.getCollection("faculty");
+                return userCollection = db.getCollection("faculty");
             else
                 throw new NullFieldException("AppUser's education is not provided.");
         } catch (NullPointerException npe){
@@ -69,14 +83,14 @@ public class UserRepository implements CrudRepository<AppUser>{
     }
 
     @Override
-    public AppUser findById(int id) {
+    public AppUser findById(String id) {
         return null;
     }
 
     @Override
     public void save(AppUser newUser) {
         try {
-            MongoCollection<Document> userCollection = openProjectZero();
+            MongoCollection<Document> userCollection = chooseCollection();
             Document newUserDoc = new Document("firstName", newUser.getFirstName())
                     .append("lastName", newUser.getLastName())
                     .append("email", newUser.getEmail())
