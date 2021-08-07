@@ -1,21 +1,11 @@
-package com.revature.p0.POJO;
+package com.revature.p0.documents;
 
+import java.util.Objects;
 
-public abstract class User {
-    String edu;
-    String firstName;
-    String lastName;
-    String email;
-    String username;
-    String password;
+public class Student extends User{
 
-    public User(String[] userInfo) {
-        this.edu = userInfo[0];
-        this.firstName = userInfo[1];
-        this.lastName = userInfo[2];
-        this.email = userInfo[3];
-        this.username = userInfo[4];
-        this.password = userInfo[5];
+    public Student(String[] studentInfo) {
+        super(new String[] {"student", studentInfo[0],studentInfo[1],studentInfo[2],studentInfo[3],studentInfo[4]});
     }
 
     public String getEdu() {
@@ -66,6 +56,16 @@ public abstract class User {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(username, student.username);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
+    }
 }
-

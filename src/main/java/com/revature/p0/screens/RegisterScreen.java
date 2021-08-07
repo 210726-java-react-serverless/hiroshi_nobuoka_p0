@@ -1,9 +1,8 @@
 package com.revature.p0.screens;
 
-import com.revature.p0.POJO.Faculty;
-import com.revature.p0.POJO.Student;
+import com.revature.p0.documents.Faculty;
+import com.revature.p0.documents.Student;
 import com.revature.p0.questions.*;
-import com.revature.p0.respositries.Repository;
 import com.revature.p0.util.ScreenRouter;
 
 import java.io.BufferedReader;
@@ -45,11 +44,11 @@ public class RegisterScreen extends Screen {
 
         if(repo.name.equals("student")) {
             student = new Student(infoArray);
-            ScreenRouter.navigate("/login", student);
+            ScreenRouter.navigate("/welcome", student);
         }
         if(repo.name.equals("faculty")){
             faculty = new Faculty(infoArray);
-            ScreenRouter.navigate("/login", faculty);
+            ScreenRouter.navigate("/welcome", faculty);
         }
     }
 }

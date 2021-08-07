@@ -1,4 +1,4 @@
-package com.revature.p0.POJO;
+package com.revature.p0.documents;
 
 
 import java.util.Objects;

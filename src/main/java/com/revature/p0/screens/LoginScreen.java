@@ -1,7 +1,5 @@
 package com.revature.p0.screens;
 
-import com.revature.p0.respositries.Repository;
-
 public class LoginScreen extends Screen {
     protected String name;
     protected String route;

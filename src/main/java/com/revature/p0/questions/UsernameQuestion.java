@@ -1,8 +1,5 @@
 package com.revature.p0.questions;
 
-import com.revature.p0.respositries.Repository;
-import com.revature.p0.respositries.StudentRepository;
-
 public class UsernameQuestion extends Question{
     private String question;
     private Repository repo;

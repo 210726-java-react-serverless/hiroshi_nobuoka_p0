@@ -1,6 +1,10 @@
 package com.revature.p0.questions;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class EduQuestion extends Question{
+    public static final Logger logger = LogManager.getLogger(EduQuestion.class);
     public String question;
     public String answer;
 
