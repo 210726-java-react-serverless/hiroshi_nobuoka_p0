@@ -6,14 +6,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class EduQuestion extends Question{
-    public static final Logger logger = LogManager.getLogger(EduQuestion.class);
-
-    private final String type = "education";
+    private String type;
     private String question = "Are you a student or a faculty member? Enter 'student' or 'faculty' below:\n>";
-    private String answer;
     private UserSession session;
 
-    public EduQuestion(){this.session = session;}
+    public EduQuestion(UserSession session){this.session = session;}
 
     public boolean validAnswer(String answer){
         if(answer.trim().toUpperCase().equals(AppUser.Edu.STUDENT.toString())) {
@@ -28,9 +25,6 @@ public class EduQuestion extends Question{
         return false;
     }
 
-    public String getType() {
-        return type;
-    }
 
     public void getQuestion() {System.out.println(question);}
 
@@ -38,11 +32,4 @@ public class EduQuestion extends Question{
         this.question = question;
     }
 
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
 }

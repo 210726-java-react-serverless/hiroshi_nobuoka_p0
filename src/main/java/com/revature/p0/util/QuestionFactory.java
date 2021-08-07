@@ -8,6 +8,8 @@ import com.revature.p0.services.UserService;
 public class QuestionFactory {
     private UserService service;
 
+    //didn't include education question because it would require a userSession dependency injection. EduQuestion will
+    //be instantiated separately.
     public QuestionFactory(UserService service){
         this.service = service;
     }

@@ -8,9 +8,8 @@ public class UserSession {
     private AppUser currentUser;
     private AppUser.Edu education;
 
-    public void setEducation(){
-        new EduQuestion(this)
-    }
+    public void setEducation(AppUser.Edu education){this.education = education;}
+
 
     public AppUser.Edu getEducation() {return education;}
 
