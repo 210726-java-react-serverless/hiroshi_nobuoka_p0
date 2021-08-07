@@ -2,7 +2,7 @@ package com.revature.p0.services;
 
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.exceptions.AuthenticationException;
-import com.revature.p0.respositries.UserRepository;
+import com.revature.p0.repositories.UserRepository;
 import com.revature.p0.util.UserSession;
 
 public class UserService {
@@ -21,6 +21,8 @@ public class UserService {
     public void register(AppUser newUser){
         repo.save(newUser);
     }
+
+
 
     public boolean usernameAvailable(String username){
 
