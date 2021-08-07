@@ -2,6 +2,7 @@ package com.revature.p0.respositries;
 
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.exceptions.DataSourceException;
+import com.revature.p0.exceptions.NullFieldException;
 import com.revature.p0.util.UserSession;
 import org.bson.Document;
 
@@ -21,9 +22,18 @@ public class UserRepository implements CrudRepository{
         try{
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
             MongoDatabase projectDatabase = mongoClient.getDatabase("Project Zero");
-            MongoCollection<Document> studentsCollection = projectDatabase.getCollection("student");
+            MongoCollection<Document> userCollection;
+
+            //Refers to the active user's education to determine which collection to query
+            if(session.getEducation().equals(AppUser.Edu.STUDENT))
+                userCollection = projectDatabase.getCollection("student");
+            else if(session.getEducation().equals(AppUser.Edu.FACULTY))
+                userCollection = projectDatabase.getCollection("faculty");
+            else
+                throw new NullFieldException("AppUser's education is not provided.");
+
             Document queryDoc = new Document("username", username).append("password", password);
-            Document authStudentDoc = studentsCollection.find(queryDoc).first();
+            Document authStudentDoc = userCollection.find(queryDoc).first();
 
             if(authStudentDoc == null){
                 return null;
@@ -34,7 +44,7 @@ public class UserRepository implements CrudRepository{
 
         } catch (NullPointerException npe){
             npe.printStackTrace(); //TODO log this
-            throw new DataSourceException("An Exception occured during query.", npe);
+            throw new DataSourceException("An Exception occurred during query.", npe);
         } catch (Exception e){
             e.printStackTrace(); //TODO log this
             throw new DataSourceException("An unknown exception occurred", e);
@@ -43,7 +53,7 @@ public class UserRepository implements CrudRepository{
 
 
     public AppUser findUserByUsername(String username){
-
+        
     }
 
     public AppUser findUserByEmail(String email){

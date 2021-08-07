@@ -15,5 +15,4 @@ public abstract class Question{
 
 
 }
-//TODO create question classes that extend Question and provide their own validation logic.
-//TODO create a question-generator class, and use in RegisterScreen.
+

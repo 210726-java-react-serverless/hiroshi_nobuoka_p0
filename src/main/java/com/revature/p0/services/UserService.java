@@ -13,12 +13,17 @@ public class UserService {
         this.repo = repo;
         this.session = session;
     }
-
+    /*
+        register() method only saves user to DB. This is because credential validation is handled by Questions classes.
+        Since the validation for username and email are handled separately (i.e. in their respective Question's classes)
+        preventing duplication is also handled separately by the usernameAvailable and emailAvailable methods.
+    */
     public void register(AppUser newUser){
         repo.save(newUser);
     }
 
     public boolean usernameAvailable(String username){
+
         if(repo.findUserByUsername(username) != null)
             return true;
         else

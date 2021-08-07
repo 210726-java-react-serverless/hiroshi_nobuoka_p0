@@ -30,7 +30,7 @@ public class RegisterScreen extends Screen {
                 new NameQuestion("What is your first name?"),
                 new NameQuestion("What is your last name?"),
                 new EmailQuestion("What is your email address?"),
-                new UsernameQuestion(),//TODO INCORPORATE REPO WITH QUESTION LOGIC
+                new UsernameQuestion(),//TODO prevent duplication using UserService
                 new PasswordQuestion("What is your password?")
         };
 
