@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public void login(String username, String password){
-        AppUser authUser = repo.findStudentByCredentials(username, password);
+        AppUser authUser = repo.findUserByCredentials(username, password);
         if(authUser == null)
             throw new AuthenticationException("Username and/or password not found");
         session.setCurrentUser(authUser);

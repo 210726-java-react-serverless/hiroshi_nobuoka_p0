@@ -1,28 +1,36 @@
 package com.revature.p0.documents;
 
 
-public abstract class AppUser {
-    String edu;
+import java.util.Objects;
+
+public class AppUser {
+    public enum Edu {STUDENT, FACULTY};
+    int id;
+    Edu edu;
     String firstName;
     String lastName;
     String email;
     String username;
     String password;
 
-    public AppUser(String[] userInfo) {
-        this.edu = userInfo[0];
-        this.firstName = userInfo[1];
-        this.lastName = userInfo[2];
-        this.email = userInfo[3];
-        this.username = userInfo[4];
-        this.password = userInfo[5];
+    public AppUser(Edu edu, String firstName, String lastName, String email, String username, String password) {
+        this.edu = edu;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
     }
 
-    public String getEdu() {
+    public int getId() {return id;}
+
+    public void setId(int id) {this.id = id;}
+
+    public Edu getEdu() {
         return edu;
     }
 
-    public void setEdu(String edu) {
+    public void setEdu(Edu edu) {
         this.edu = edu;
     }
 
@@ -66,6 +74,17 @@ public abstract class AppUser {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AppUser appUser = (AppUser) o;
+        return id == appUser.id && edu == appUser.edu && Objects.equals(firstName, appUser.firstName) && Objects.equals(lastName, appUser.lastName) && Objects.equals(email, appUser.email) && Objects.equals(username, appUser.username) && Objects.equals(password, appUser.password);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, edu, firstName, lastName, email, username, password);
+    }
 }
 

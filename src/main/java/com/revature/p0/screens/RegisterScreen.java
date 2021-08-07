@@ -1,25 +1,27 @@
 package com.revature.p0.screens;
 
-import com.revature.p0.documents.Faculty;
-import com.revature.p0.documents.Student;
+import com.revature.p0.documents.AppUser;
 import com.revature.p0.questions.*;
-import com.revature.p0.respositries.UserRepository;
+import com.revature.p0.services.UserService;
 import com.revature.p0.util.ScreenRouter;
+import com.revature.p0.util.UserSession;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
+
 public class RegisterScreen extends Screen {
     private BufferedReader reader;
-    private UserRepository repo;
-    private Student student;
-    private Faculty faculty;
-    String[] infoArray = new String[6];
+    private UserService service;
+    private AppUser user;
+    private UserSession session;
+    String[] infoArray = new String[5];
 
 
-    public RegisterScreen(BufferedReader reader, UserRepository repo){
+    public RegisterScreen(BufferedReader reader, UserService service, UserSession session){
         super("Register Screen", "/register");
         this.reader = reader;
+        this.session = session;
     }
 
     public void render() throws IOException {
@@ -43,13 +45,15 @@ public class RegisterScreen extends Screen {
 
         }
 
-        if(repo.name.equals("student")) {
-            student = new Student(infoArray);
-            ScreenRouter.navigate("/welcome", student);
+        if(session.getEducation() == AppUser.Edu.STUDENT) {
+            AppUser student = new AppUser(AppUser.Edu.STUDENT, infoArray[1], infoArray[2], infoArray[3], infoArray[4], infoArray[5]);
+            session.setCurrentUser(student);
+            ScreenRouter.navigate("/welcome");
         }
-        if(repo.name.equals("faculty")){
-            faculty = new Faculty(infoArray);
-            ScreenRouter.navigate("/welcome", faculty);
+        if(session.getEducation() == AppUser.Edu.FACULTY)){
+            AppUser faculty = new AppUser(AppUser.Edu.FACULTY, infoArray[1], infoArray[2], infoArray[3], infoArray[4], infoArray[5]);
+            session.setCurrentUser(faculty);
+            ScreenRouter.navigate("/welcome");
         }
     }
 }

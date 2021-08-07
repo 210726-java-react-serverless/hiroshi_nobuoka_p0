@@ -1,22 +1,22 @@
 package com.revature.p0.respositries;
 
+import com.revature.p0.documents.AppUser;
 import com.revature.p0.exceptions.DataSourceException;
+import com.revature.p0.util.UserSession;
 import org.bson.Document;
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-
-import com.revature.p0.documents.Student;
 import com.revature.p0.util.MongoClientFactory;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 public class UserRepository implements CrudRepository{
+    private UserSession session;
 
-    public Student findStudentByCredentials(String username, String password){
+    public UserRepository(UserSession session){ this.session = session;}
+
+    public AppUser findUserByCredentials(String username, String password){
 
         try{
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
@@ -28,10 +28,9 @@ public class UserRepository implements CrudRepository{
             if(authStudentDoc == null){
                 return null;
             }
-            String[] valuesArray = {authStudentDoc.get("firstName").toString(), authStudentDoc.get("lastName").toString(), authStudentDoc.get("email").toString(),
-                    authStudentDoc.get("username").toString(), authStudentDoc.get("password").toString()};
 
-            return new Student(valuesArray);
+            return new AppUser(session.getEducation(), authStudentDoc.get("firstName").toString(), authStudentDoc.get("lastName").toString(), authStudentDoc.get("email").toString(),
+                    authStudentDoc.get("username").toString(), authStudentDoc.get("password").toString());
 
         } catch (NullPointerException npe){
             npe.printStackTrace(); //TODO log this
@@ -43,7 +42,13 @@ public class UserRepository implements CrudRepository{
     }
 
 
+    public AppUser findUserByUsername(String username){
 
+    }
+
+    public AppUser findUserByEmail(String email){
+
+    }
 
 
     @Override
