@@ -1,11 +1,10 @@
 package com.revature.p0.questions;
 
 public abstract class Question{
-    private String question;
-    private String name;
+    public String question;
 
-    public Question(String name, String question){
-        this.name = name;
+
+    public Question(String question){
         this.question= question;
     }
     public abstract boolean validAnswer(String answer);

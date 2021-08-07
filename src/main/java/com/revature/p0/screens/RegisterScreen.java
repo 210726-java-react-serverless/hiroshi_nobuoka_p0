@@ -3,6 +3,7 @@ package com.revature.p0.screens;
 import com.revature.p0.documents.Faculty;
 import com.revature.p0.documents.Student;
 import com.revature.p0.questions.*;
+import com.revature.p0.respositries.UserRepository;
 import com.revature.p0.util.ScreenRouter;
 
 import java.io.BufferedReader;
@@ -10,13 +11,13 @@ import java.io.IOException;
 
 public class RegisterScreen extends Screen {
     private BufferedReader reader;
-    private Repository repo;
+    private UserRepository repo;
     private Student student;
     private Faculty faculty;
     String[] infoArray = new String[6];
 
 
-    public RegisterScreen(BufferedReader reader, Repository repo){
+    public RegisterScreen(BufferedReader reader, UserRepository repo){
         super("Register Screen", "/register");
         this.reader = reader;
     }

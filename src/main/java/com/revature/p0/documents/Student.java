@@ -2,7 +2,7 @@ package com.revature.p0.documents;
 
 import java.util.Objects;
 
-public class Student extends User{
+public class Student extends AppUser {
 
     public Student(String[] studentInfo) {
         super(new String[] {"student", studentInfo[0],studentInfo[1],studentInfo[2],studentInfo[3],studentInfo[4]});

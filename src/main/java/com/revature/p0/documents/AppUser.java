@@ -1,7 +1,7 @@
 package com.revature.p0.documents;
 
 
-public abstract class User {
+public abstract class AppUser {
     String edu;
     String firstName;
     String lastName;
@@ -9,7 +9,7 @@ public abstract class User {
     String username;
     String password;
 
-    public User(String[] userInfo) {
+    public AppUser(String[] userInfo) {
         this.edu = userInfo[0];
         this.firstName = userInfo[1];
         this.lastName = userInfo[2];
