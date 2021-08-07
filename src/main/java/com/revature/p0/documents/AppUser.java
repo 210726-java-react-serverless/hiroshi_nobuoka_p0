@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class AppUser {
     public enum Edu {STUDENT, FACULTY};
-    int id;
+    String id;
     Edu edu;
     String firstName;
     String lastName;
@@ -22,9 +22,9 @@ public class AppUser {
         this.password = password;
     }
 
-    public int getId() {return id;}
+    public String getId() {return id;}
 
-    public void setId(int id) {this.id = id;}
+    public void setId(String id) {this.id = id;}
 
     public Edu getEdu() {
         return edu;
