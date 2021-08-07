@@ -30,11 +30,7 @@ public class EmailQuestion extends Question{
         return true;
     }
 
-    public String getQuestion() {
-        return question;
-    }
+    public void getQuestion() {System.out.println(question);}
 
-    public void setQuestion(String question) {
-        this.question = question;
-    }
+    public void setQuestion(String question) {this.question = question;}
 }

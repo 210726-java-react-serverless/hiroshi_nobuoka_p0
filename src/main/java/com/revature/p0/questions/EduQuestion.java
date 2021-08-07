@@ -1,5 +1,7 @@
 package com.revature.p0.questions;
 
+import com.revature.p0.documents.AppUser;
+import com.revature.p0.util.UserSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,18 +11,20 @@ public class EduQuestion extends Question{
     private final String type = "education";
     private String question = "Are you a student or a faculty member? Enter 'student' or 'faculty' below:\n>";
     private String answer;
+    private UserSession session;
 
+    public EduQuestion(){this.session = session;}
 
     public boolean validAnswer(String answer){
-        if(answer.trim().toLowerCase().equals("student")) {
-            this.answer = "student";
+        if(answer.trim().toUpperCase().equals(AppUser.Edu.STUDENT.toString())) {
+            session.setEducation(AppUser.Edu.STUDENT);
             return true;
         }
-        if(answer.trim().toLowerCase().equals("faculty")) {
-            this.answer = "faculty";
+        if(answer.trim().toUpperCase().equals(AppUser.Edu.FACULTY.toString())) {
+            session.setEducation(AppUser.Edu.STUDENT);
             return true;
         }
-        System.out.println("Please enter a valid entry.\n");
+        System.out.println("Please enter either 'student' or 'faculty'.\n");
         return false;
     }
 
@@ -28,9 +32,7 @@ public class EduQuestion extends Question{
         return type;
     }
 
-    public String getQuestion() {
-        return question;
-    }
+    public void getQuestion() {System.out.println(question);}
 
     public void setQuestion(String question) {
         this.question = question;

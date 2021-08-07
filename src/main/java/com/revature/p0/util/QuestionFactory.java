@@ -12,8 +12,6 @@ public class QuestionFactory {
         this.service = service;
     }
     public Question getQuestion(String type){
-        if(type.equals("education"))
-            return new EduQuestion();
         if(type.equals("email"))
             return new EmailQuestion(service);
         if(type.equals("firstname")){
