@@ -1,11 +1,9 @@
 package com.revature.p0.questions;
 
 public class NameQuestion extends Question{
-    public String question;
+    private static final String type = "name";
+    private String question;
 
-    public NameQuestion(String string){
-        super(string);
-    }
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()){
             System.out.println("Cannot be empty.\n");

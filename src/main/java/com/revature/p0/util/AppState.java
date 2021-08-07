@@ -10,12 +10,7 @@ public class AppState {
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     ScreenRouter screenRouter = new ScreenRouter();
-    RepoRouter repoRouter = new RepoRouter();
 
-    repoRouter.addRepos(
-
-
-            )
 
     public void startup(){
         //Determine view so that router can add screens with the right repo

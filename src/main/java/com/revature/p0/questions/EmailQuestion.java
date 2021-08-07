@@ -1,10 +1,14 @@
 package com.revature.p0.questions;
 
-public class EmailQuestion extends Question{
-    public String question;
+import com.revature.p0.services.UserService;
 
-    public EmailQuestion(String question){
-        super(question);
+public class EmailQuestion extends Question{
+    private static final String type = "email";
+    private String question = "Enter your email address: ";
+    private UserService service;
+
+    public EmailQuestion(UserService service){
+        this.service = service;
     }
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()) {
@@ -19,6 +23,18 @@ public class EmailQuestion extends Question{
             System.out.println("Must enter a valid email address.\n");
             return false;
         }
+        if(!service.emailAvailable(answer)){
+            System.out.println("Email already being used.");
+            return false;
+        }
         return true;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
     }
 }

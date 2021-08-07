@@ -1,28 +1,32 @@
 package com.revature.p0.questions;
 
+import com.revature.p0.services.UserService;
+
 public class UsernameQuestion extends Question{
-    private String question;
-    private Repository repo;
-
-
-    public UsernameQuestion(String question, Repository repo) {
-        super(question);
-        if(repo.name.equals("student"))
-            this.repo = (StudentRepository) repo;
-        if(repo.name.equals("faculty"))
-            this.repo = (FacultyRepository) repo;
+    private static final String type = "username";
+    private String question ="Enter your username: ";
+    private UserService service;
+    public UsernameQuestion(UserService service){
+        this.service = service;
     }
-
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()) {
+            //TODO include Log for answer
             System.out.println("Cannot be empty.\n");
             return false;
         }
-        //log here
-        if(!repo.exists(answer)) {
-            System.out.println("Username is already taken.\n");
+        if(!service.usernameAvailable(answer)) {
+            System.out.println("Username not available.\n");
             return false;
         }
         return true;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
     }
 }

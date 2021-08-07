@@ -7,7 +7,7 @@ import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Set;
 
-    public class ScreenRouter{
+public class ScreenRouter{
 
         private Screen currentScreen;
         private final Set<Screen> screens = new HashSet<>();
@@ -33,7 +33,7 @@ import java.util.Set;
        }
 
         public Screen getCurrent(){return currentScreen;};
-        
+
         //TODO (optional) implement methods for history
 
 }

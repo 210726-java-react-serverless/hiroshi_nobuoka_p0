@@ -5,12 +5,12 @@ import org.apache.logging.log4j.Logger;
 
 public class EduQuestion extends Question{
     public static final Logger logger = LogManager.getLogger(EduQuestion.class);
-    public String question;
-    public String answer;
 
-    public EduQuestion(){
-        super("Are you a student or a faculty member? Enter 'student' or 'faculty' below:\n>");
-    }
+    private final String type = "education";
+    private String question = "Are you a student or a faculty member? Enter 'student' or 'faculty' below:\n>";
+    private String answer;
+
+
     public boolean validAnswer(String answer){
         if(answer.trim().toLowerCase().equals("student")) {
             this.answer = "student";
@@ -22,5 +22,25 @@ public class EduQuestion extends Question{
         }
         System.out.println("Please enter a valid entry.\n");
         return false;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }

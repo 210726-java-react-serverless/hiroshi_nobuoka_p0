@@ -1,11 +1,9 @@
 package com.revature.p0.questions;
 
 public class PasswordQuestion extends Question{
-    public String question;
+    private static final String type = "password";
+    private String question ="Enter your password: ";
 
-    public PasswordQuestion(String question){
-        super(question);
-    }
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()) {
             System.out.println("Cannot be empty.\n");
@@ -22,5 +20,13 @@ public class PasswordQuestion extends Question{
             return false;
         }
         return true;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
     }
 }
