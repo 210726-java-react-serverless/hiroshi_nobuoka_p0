@@ -2,6 +2,7 @@ package com.revature.p0.services;
 
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.exceptions.AuthenticationException;
+import com.revature.p0.exceptions.InvalidArgumentException;
 import com.revature.p0.repositories.UserRepository;
 import com.revature.p0.util.UserSession;
 
@@ -18,8 +19,13 @@ public class UserService {
         Since the validation for username and email are handled separately (i.e. in their respective Question's classes)
         preventing duplication is also handled separately by the usernameAvailable and emailAvailable methods.
     */
-    public void register(AppUser newUser){
-        repo.save(newUser);
+    public void register(AppUser user, String newOrUpdate) {
+        if (newOrUpdate.equals("new"))
+            repo.save(user);
+        else if(newOrUpdate.equals("update"))
+            repo.update(user);
+        else
+            throw new InvalidArgumentException("Argument for register() method must be 'new' or 'update'");
     }
 
 

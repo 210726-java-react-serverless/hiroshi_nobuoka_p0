@@ -32,19 +32,19 @@ public class UpdateScreen {
                 +"Password: "+user.getPassword()+"\n"; //TODO Find way to encrypt
 
         String menu = "Please select the item you wish to update: \n"+
-                "1) First Name\t  2)Last Name\t 3)Email\n4)Username\t 5)Password";
+                "1)First Name\t  2)Last Name\t 3)Email\n4)Username\t 5)Password";
 
         int userEntry = Integer.parseInt(reader.readLine());
         QuestionFactory qFactory = new QuestionFactory(service);
         String[] questionTypeArray = {"firstname", "lastname", "email", "username", "password"};
         //TODO updating password should not allow for duplication.
+
         Question question = qFactory.getQuestion(questionTypeArray[userEntry]);
         String answer = reader.readLine();
         while(question.validAnswer(answer))
             answer = reader.readLine();
 
-        
-
-
+        user.getFieldDirectory().replace(questionTypeArray[userEntry], answer);
+        service.register(user,"update");
     }
 }

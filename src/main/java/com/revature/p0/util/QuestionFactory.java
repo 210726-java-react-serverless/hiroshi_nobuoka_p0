@@ -13,6 +13,7 @@ public class QuestionFactory {
     public QuestionFactory(UserService service){
         this.service = service;
     }
+
     public Question getQuestion(String type){
         if(type.equals("email"))
             return new EmailQuestion(service);

@@ -1,17 +1,21 @@
 package com.revature.p0.documents;
 
 
+import org.bson.Document;
+
+import java.util.HashMap;
 import java.util.Objects;
 
 public class AppUser {
     public enum Edu {STUDENT, FACULTY};
-    String id;
-    Edu edu;
-    String firstName;
-    String lastName;
-    String email;
-    String username;
-    String password;
+    private String id;
+    private Edu edu;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String username;
+    private String password;
+    private HashMap<String, String> fieldDirectory = new HashMap<>();
 
     public AppUser(Edu edu, String firstName, String lastName, String email, String username, String password) {
         this.edu = edu;
@@ -20,6 +24,22 @@ public class AppUser {
         this.email = email;
         this.username = username;
         this.password = password;
+        fieldDirectory.put("firstname", firstName);
+        fieldDirectory.put("lastname", lastName);
+        fieldDirectory.put("email", email);
+        fieldDirectory.put("username", username);
+        fieldDirectory.put("password", password);
+    }
+
+    public HashMap<String, String> getFieldDirectory() {return fieldDirectory;}
+
+    public static Document toDocument(AppUser newUser){
+        Document newUserDoc = new Document("firstName", newUser.getFirstName())
+                .append("lastName", newUser.getLastName())
+                .append("email", newUser.getEmail())
+                .append("username", newUser.getUsername())
+                .append("password", newUser.getPassword());
+        return newUserDoc;
     }
 
     public String getId() {return id;}
