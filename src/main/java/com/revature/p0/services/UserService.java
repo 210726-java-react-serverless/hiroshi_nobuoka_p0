@@ -3,7 +3,7 @@ package com.revature.p0.services;
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.exceptions.AuthenticationException;
 import com.revature.p0.exceptions.InvalidArgumentException;
-import com.revature.p0.questions.InstantiateUserException;
+import com.revature.p0.exceptions.InstantiateUserException;
 import com.revature.p0.repositories.UserRepository;
 import com.revature.p0.util.UserSession;
 
@@ -54,11 +54,12 @@ public class UserService {
             return false;
     }
 
-    public void login(String username, String password){
+    public boolean login(String username, String password){
         AppUser authUser = repo.findUserByCredentials(username, password);
         if(authUser == null)
-            throw new AuthenticationException("Username and/or password not found");
+            return false;
         session.setCurrentUser(authUser);
+        return true;
     }
 
     
