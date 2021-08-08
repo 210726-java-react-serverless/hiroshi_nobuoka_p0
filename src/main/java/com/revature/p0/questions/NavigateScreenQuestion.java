@@ -2,7 +2,7 @@ package com.revature.p0.questions;
 
 public class NavigateScreenQuestion extends Question{
     private static final String type = "navigate";
-    private String question = "Please enter an appropriate value: \n";
+    private String question = "Please enter an appropriate value: ";
     private int numberOfOptions;
 
     public NavigateScreenQuestion(int numberOfOptions){

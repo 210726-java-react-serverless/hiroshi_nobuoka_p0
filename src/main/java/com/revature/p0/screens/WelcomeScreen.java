@@ -29,7 +29,7 @@ public class WelcomeScreen extends Screen{
 
         NavigateScreenQuestion askUserInput = new NavigateScreenQuestion(3);
         String userInput = reader.readLine();
-        while(askUserInput.validAnswer(userInput)){
+        while(!askUserInput.validAnswer(userInput)){
             userInput = reader.readLine();
         }
         switch(userInput){
@@ -43,5 +43,6 @@ public class WelcomeScreen extends Screen{
                 System.exit(0);
             }
         }
+
 }
 

@@ -1,5 +1,8 @@
 package com.revature.p0.screens;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.questions.*;
 import com.revature.p0.services.UserService;
@@ -11,6 +14,7 @@ import com.revature.p0.util.UserSession;
 import java.io.BufferedReader;
 
 public class RegisterScreen extends Screen {
+    static final Logger logger = LoggerFactory.getLogger(RegisterScreen.class);
     private BufferedReader reader;
     private final UserService service;
     private UserSession session;
@@ -20,9 +24,11 @@ public class RegisterScreen extends Screen {
         super("Register Screen", "/register",reader,router);
         this.service = service;
         this.session = session;
+        this.reader = reader;
     }
 
     public void render() throws Exception {
+        //logger.info("Starting method execution: " + methodSignature.getD)
         String menu = "You're on the register screen. \n"
                 + "\n 1)Register \t 2)Return";
 

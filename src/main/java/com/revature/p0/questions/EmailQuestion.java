@@ -15,11 +15,11 @@ public class EmailQuestion extends Question{
     @Override
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()) {
-            System.out.println("Cannot be empty.\n");
+            System.out.println("Cannot be empty.");
             return false;
         }
         if(answer.indexOf("@") == -1) {
-            System.out.println("Must enter a valid email address.\n");
+            System.out.println("Must enter a valid email address.");
             return false;
         }
         if(!answer.endsWith(".com")) {

@@ -1,8 +1,6 @@
 package com.revature.p0.repositories;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.model.Filters;
 import com.revature.p0.documents.AppUser;
@@ -16,10 +14,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.revature.p0.util.MongoClientFactory;
-import org.mongojack.JacksonMongoCollection;
-
-import javax.sql.DataSource;
-
 
 public class UserRepository implements CrudRepository<AppUser>{
     private UserSession session;

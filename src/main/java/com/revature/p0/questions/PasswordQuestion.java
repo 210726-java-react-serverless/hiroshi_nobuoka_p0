@@ -13,17 +13,17 @@ public class PasswordQuestion extends Question{
     @Override
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()) {
-            System.out.println("Cannot be empty.\n");
+            System.out.println("Cannot be empty.");
             return false;
         }
         //set min length
         if(answer.length()<6) {
-            System.out.println("Your password is too short.\n");
+            System.out.println("Your password is too short.");
             return false;
         }
         //set special char requirement
         if(!answer.matches(".*[!\"#$%&\'()*+,./:;<=>?@^_|~].*")) {
-            System.out.println("Special character required.\n");
+            System.out.println("Special character required.");
             return false;
         }
         return true;

@@ -13,6 +13,8 @@ public class ScreenRouter{
         private final Set<Screen> screens = new HashSet<>();
         private ArrayDeque<Screen> history;
 
+        public ScreenRouter(){ history = new ArrayDeque<Screen>();}
+
         public void addScreen(Screen screen){
             screens.add(screen);
         };

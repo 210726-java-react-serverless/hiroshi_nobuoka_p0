@@ -11,11 +11,11 @@ public class NameQuestion extends Question{
     @Override
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()){
-            System.out.println("Cannot be empty.\n");
+            System.out.println("Cannot be empty.");
             return false;
         }
         if(!answer.matches("[a-z]")) {
-            System.out.println("Only names with English letters are considered valid. Please try again.\n");
+            System.out.println("Only names with English letters are considered valid. Please try again.");
             return false;
         }
         return true;

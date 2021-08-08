@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EduQuestion extends Question{
     private String type;
-    private String question = "Are you a student or a faculty member? Enter 'student' or 'faculty' below:\n>";
+    private String question = "Are you a student or a faculty member? Enter 'student' or 'faculty' below: >";
     private UserSession session;
 
     public EduQuestion(UserSession session){
@@ -23,8 +23,8 @@ public class EduQuestion extends Question{
         if(answer.trim().toUpperCase().equals(AppUser.Edu.FACULTY.toString())) {
             session.setEducation(AppUser.Edu.STUDENT);
             return true;
-        }
-        System.out.println("Please enter either 'student' or 'faculty'.\n");
+        } else
+            System.out.println("Please enter either 'student' or 'faculty'.");
         return false;
     }
 
