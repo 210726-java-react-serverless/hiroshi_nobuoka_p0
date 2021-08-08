@@ -5,6 +5,7 @@ import com.revature.p0.questions.*;
 import com.revature.p0.services.UserService;
 import com.revature.p0.util.QuestionFactory;
 import com.revature.p0.util.ScreenRouter;
+import com.revature.p0.util.UserSession;
 
 
 import java.io.BufferedReader;
@@ -12,14 +13,13 @@ import java.io.BufferedReader;
 public class RegisterScreen extends Screen {
     private BufferedReader reader;
     private final UserService service;
+    private UserSession session;
 
 
-
-
-    public RegisterScreen(BufferedReader reader, ScreenRouter router, UserService service){
+    public RegisterScreen(BufferedReader reader, ScreenRouter router, UserService service, UserSession session){
         super("Register Screen", "/register",reader,router);
         this.service = service;
-
+        this.session = session;
     }
 
     public void render() throws Exception {
@@ -40,6 +40,12 @@ public class RegisterScreen extends Screen {
             case "2":
                 router.previousScreen();
                 return;
+        }
+
+        EduQuestion eduQuestion = new EduQuestion(session);
+        String edu = reader.readLine();
+        while(!eduQuestion.validAnswer(edu)){
+            edu = reader.readLine();
         }
 
         QuestionFactory qFactory = new QuestionFactory(service);

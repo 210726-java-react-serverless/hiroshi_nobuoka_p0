@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 public class UserRepository implements CrudRepository<AppUser>{
     private UserSession session;
     MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-    MongoDatabase projectDb = mongoClient.getDatabase("Project Zero");
+    MongoDatabase projectDb = mongoClient.getDatabase("ProjectZero");
 
     public UserRepository(UserSession session){ this.session = session;}
 

@@ -6,12 +6,16 @@ import com.revature.p0.util.ScreenRouter;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+
 public class WelcomeScreen extends Screen{
+
     private BufferedReader reader;
     protected ScreenRouter screenRouter;
 
     public WelcomeScreen(BufferedReader reader, ScreenRouter screenRouter){
         super("Welcome Screen", "/welcome", reader, screenRouter);
+        this.reader = reader;
+        this.screenRouter = screenRouter;
         }
 
     public void render() throws IOException {
@@ -24,11 +28,11 @@ public class WelcomeScreen extends Screen{
         System.out.print(menu);
 
         NavigateScreenQuestion askUserInput = new NavigateScreenQuestion(3);
-        String answer = reader.readLine();
-        while(askUserInput.validAnswer(answer)){
-            answer = reader.readLine();
+        String userInput = reader.readLine();
+        while(askUserInput.validAnswer(userInput)){
+            userInput = reader.readLine();
         }
-        switch(answer){
+        switch(userInput){
             case "1":
                 screenRouter.navigate("/login");
                 break;
