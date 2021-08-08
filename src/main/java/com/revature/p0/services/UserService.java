@@ -16,16 +16,6 @@ public class UserService {
         this.session = session;
     }
 
-    //calls the appropriate repo method, depending on the newOrUpdate argument
-    public void register(AppUser user, String newOrUpdate) {
-        if (newOrUpdate.equals("new"))
-            repo.save(user);
-        else if(newOrUpdate.equals("update"))
-            repo.update(user);
-        else
-            throw new InvalidArgumentException("Argument for register() method must be 'new' or 'update'");
-    }
-
     public AppUser createAppUser(String[] answerArray) throws Exception{
         if(session.getEducation() == AppUser.Edu.STUDENT) {
             AppUser student = new AppUser(AppUser.Edu.STUDENT, answerArray[1], answerArray[2], answerArray[3], answerArray[4], answerArray[5]);
@@ -37,7 +27,16 @@ public class UserService {
             return faculty;
         } else
             throw new InstantiateUserException();
+    }
 
+    //calls the appropriate repo method, depending on the newOrUpdate argument
+    public void register(AppUser user, String newOrUpdate) {
+        if (newOrUpdate.equals("new"))
+            repo.save(user);
+        else if(newOrUpdate.equals("update"))
+            repo.update(user);
+        else
+            throw new InvalidArgumentException("Argument for register() method must be 'new' or 'update'");
     }
 
     public boolean usernameAvailable(String username){
