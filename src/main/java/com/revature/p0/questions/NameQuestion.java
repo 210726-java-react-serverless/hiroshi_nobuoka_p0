@@ -4,6 +4,11 @@ public class NameQuestion extends Question{
     private static final String type = "name";
     private String question;
 
+    public NameQuestion(){
+        System.out.println(question);
+    }
+
+    @Override
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()){
             System.out.println("Cannot be empty.\n");
@@ -16,7 +21,6 @@ public class NameQuestion extends Question{
         return true;
     }
 
-    public void getQuestion() {System.out.println(question);}
 
     public void setQuestion(String question) {
         this.question = question;

@@ -6,9 +6,13 @@ public class UsernameQuestion extends Question{
     private static final String type = "username";
     private String question ="Enter your username: ";
     private UserService service;
+
     public UsernameQuestion(UserService service){
         this.service = service;
+        System.out.println(question);
     }
+
+    @Override
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()) {
             //TODO include Log for answer
@@ -21,8 +25,6 @@ public class UsernameQuestion extends Question{
         }
         return true;
     }
-
-    public void getQuestion() {System.out.println(question);}
 
     public void setQuestion(String question) {
         this.question = question;

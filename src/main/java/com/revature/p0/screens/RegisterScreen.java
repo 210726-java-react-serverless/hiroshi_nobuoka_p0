@@ -3,57 +3,60 @@ package com.revature.p0.screens;
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.questions.*;
 import com.revature.p0.services.UserService;
+import com.revature.p0.util.QuestionFactory;
 import com.revature.p0.util.ScreenRouter;
 import com.revature.p0.util.UserSession;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-
 public class RegisterScreen extends Screen {
     private BufferedReader reader;
     private UserService service;
     private AppUser user;
     private UserSession session;
-    String[] infoArray = new String[5];
+    private ScreenRouter router;
 
 
-    public RegisterScreen(BufferedReader reader, UserService service, UserSession session){
+    public RegisterScreen(BufferedReader reader, UserService service, ScreenRouter router, UserSession session){
         super("Register Screen", "/register");
         this.reader = reader;
+        this.service = service;
+        this.router = router;
         this.session = session;
     }
 
-    public void render() throws IOException {
+    public void render() throws Exception {
+        String menu = "You're on the register screen. \n"
+                + "\n 1)Register \t 2)Return";
 
-        Question[] qArray = {
-                new NameQuestion("What is your first name?"),
-                new NameQuestion("What is your last name?"),
-                new EmailQuestion("What is your email address?"),
-                new UsernameQuestion(),//TODO prevent duplication using UserService
-                new PasswordQuestion("What is your password?")
-        };
+        //factory doesn't include NavigateScreen question b/c of its dynamic argument.
+        Question prompt = new NavigateScreenQuestion(2);
+        String userInput = reader.readLine();
+        while (!prompt.validAnswer(userInput)) {
+            userInput = reader.readLine();
+        }
 
-        for(int i=0; i< qArray.length; i++){
-            Question q = qArray[i];
-            System.out.println(q.question);
-            String answer = reader.readLine();
-            while(!q.validAnswer(answer)) {
-                answer = reader.readLine();
+
+        if (userInput == "1") {
+            QuestionFactory qFactory = new QuestionFactory(service);
+            String[] questionTypeArray = {"firstname", "lastname", "email", "username", "password"};
+            String[] answerArray = new String[questionTypeArray.length];
+
+            for (int i = 0; i < questionTypeArray.length; i++) {
+                Question question = qFactory.getQuestion(questionTypeArray[i]);
+                String answer = reader.readLine();
+                while (!question.validAnswer(answer)) {
+                    answer = reader.readLine();
+                }
+                answerArray[i] = answer;
+
+                AppUser newUser = service.createAppUser(answerArray);
+                service.register(newUser, "new");
+                router.navigate("/welcome");
             }
-            infoArray[i] = answer;
-
-        }
-
-        if(session.getEducation() == AppUser.Edu.STUDENT) {
-            AppUser student = new AppUser(AppUser.Edu.STUDENT, infoArray[1], infoArray[2], infoArray[3], infoArray[4], infoArray[5]);
-            session.setCurrentUser(student);
-            ScreenRouter.navigate("/welcome");
-        }
-        if(session.getEducation() == AppUser.Edu.FACULTY)){
-            AppUser faculty = new AppUser(AppUser.Edu.FACULTY, infoArray[1], infoArray[2], infoArray[3], infoArray[4], infoArray[5]);
-            session.setCurrentUser(faculty);
-            ScreenRouter.navigate("/welcome");
-        }
+        } else
+            router.previousScreen();
     }
+
 }

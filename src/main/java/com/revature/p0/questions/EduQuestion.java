@@ -10,7 +10,10 @@ public class EduQuestion extends Question{
     private String question = "Are you a student or a faculty member? Enter 'student' or 'faculty' below:\n>";
     private UserSession session;
 
-    public EduQuestion(UserSession session){this.session = session;}
+    public EduQuestion(UserSession session){
+        this.session = session;
+        System.out.println(question);
+    }
 
     public boolean validAnswer(String answer){
         if(answer.trim().toUpperCase().equals(AppUser.Edu.STUDENT.toString())) {
@@ -25,8 +28,6 @@ public class EduQuestion extends Question{
         return false;
     }
 
-
-    public void getQuestion() {System.out.println(question);}
 
     public void setQuestion(String question) {
         this.question = question;

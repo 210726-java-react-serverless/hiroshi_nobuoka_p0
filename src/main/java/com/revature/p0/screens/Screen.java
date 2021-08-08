@@ -12,7 +12,7 @@ public abstract class Screen {
         this.route= route;
     }
 
-    public abstract void render() throws IOException;
+    public abstract void render() throws Exception;
 
     public String getName() {
         return name;

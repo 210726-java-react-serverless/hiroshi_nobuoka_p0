@@ -8,8 +8,11 @@ import com.revature.p0.services.UserService;
 public class QuestionFactory {
     private UserService service;
 
-    //didn't include education question because it would require a userSession dependency injection. EduQuestion will
-    //be instantiated separately.
+    /*
+        Didn't include the Education question because of the UserSession dependency
+        injection. Didn't include NavigateScreen question because of its dynamic
+        numberOfOptions field.
+     */
     public QuestionFactory(UserService service){
         this.service = service;
     }

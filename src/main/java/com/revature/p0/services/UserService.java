@@ -3,6 +3,7 @@ package com.revature.p0.services;
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.exceptions.AuthenticationException;
 import com.revature.p0.exceptions.InvalidArgumentException;
+import com.revature.p0.questions.InstantiateUserException;
 import com.revature.p0.repositories.UserRepository;
 import com.revature.p0.util.UserSession;
 
@@ -14,11 +15,8 @@ public class UserService {
         this.repo = repo;
         this.session = session;
     }
-    /*
-        register() method only saves user to DB. This is because credential validation is handled by Questions classes.
-        Since the validation for username and email are handled separately (i.e. in their respective Question's classes)
-        preventing duplication is also handled separately by the usernameAvailable and emailAvailable methods.
-    */
+
+    //calls the appropriate repo method, depending on the newOrUpdate argument
     public void register(AppUser user, String newOrUpdate) {
         if (newOrUpdate.equals("new"))
             repo.save(user);
@@ -28,7 +26,19 @@ public class UserService {
             throw new InvalidArgumentException("Argument for register() method must be 'new' or 'update'");
     }
 
+    public AppUser createAppUser(String[] answerArray) throws Exception{
+        if(session.getEducation() == AppUser.Edu.STUDENT) {
+            AppUser student = new AppUser(AppUser.Edu.STUDENT, answerArray[1], answerArray[2], answerArray[3], answerArray[4], answerArray[5]);
+            session.setCurrentUser(student);
+            return student;
+        } else if(session.getEducation() == AppUser.Edu.FACULTY) {
+            AppUser faculty = new AppUser(AppUser.Edu.FACULTY, answerArray[1], answerArray[2], answerArray[3], answerArray[4], answerArray[5]);
+            session.setCurrentUser(faculty);
+            return faculty;
+        } else
+            throw new InstantiateUserException();
 
+    }
 
     public boolean usernameAvailable(String username){
 
