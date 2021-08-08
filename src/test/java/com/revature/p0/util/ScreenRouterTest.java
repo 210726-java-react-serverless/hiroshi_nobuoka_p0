@@ -30,8 +30,8 @@ public class ScreenRouterTest {
         Screen expectedResult = mockWelcomeScreen;
 
         //Act
-        sut.changeCurrent(route);
-        Screen actualResult = sut.getCurrent();
+        sut.navigate(route);
+        Screen actualResult = sut.getCurrentScreen();
 
         //Assert
         Assert.assertEquals("Expect current screen to be the welcome screen",expectedResult,actualResult);

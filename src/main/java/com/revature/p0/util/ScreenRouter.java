@@ -32,7 +32,7 @@ public class ScreenRouter{
             currentScreen = history.pop();
        }
 
-        public Screen getCurrent(){return currentScreen;};
+        public Screen getCurrentScreen(){return currentScreen;};
 
         //TODO (optional) implement methods for history
 
