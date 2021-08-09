@@ -1,13 +1,14 @@
 package com.revature.p0.services;
 
 import com.revature.p0.documents.AppUser;
-import com.revature.p0.exceptions.AuthenticationException;
-import com.revature.p0.exceptions.InvalidArgumentException;
 import com.revature.p0.exceptions.InstantiateUserException;
 import com.revature.p0.repositories.UserRepository;
 import com.revature.p0.util.UserSession;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UserService {
+    static final Logger logger = LogManager.getLogger(UserService.class);
     private final UserRepository repo;
     private UserSession session;
 
@@ -16,17 +17,19 @@ public class UserService {
         this.session = session;
     }
 
-    public AppUser createAppUser(String[] answerArray) throws Exception{
-        if(session.getEducation() == AppUser.Edu.STUDENT) {
-            AppUser student = new AppUser(AppUser.Edu.STUDENT, answerArray[1], answerArray[2], answerArray[3], answerArray[4], answerArray[5]);
+    public AppUser createAppUser(String[] answerArray) throws ArrayIndexOutOfBoundsException{
+        if(session.getEducation() == AppUser.EDU.STUDENT) {
+            AppUser student = new AppUser(AppUser.EDU.STUDENT, answerArray[0], answerArray[1], answerArray[2], answerArray[3], answerArray[4]);
             session.setCurrentUser(student);
             return student;
-        } else if(session.getEducation() == AppUser.Edu.FACULTY) {
-            AppUser faculty = new AppUser(AppUser.Edu.FACULTY, answerArray[1], answerArray[2], answerArray[3], answerArray[4], answerArray[5]);
+        } else if(session.getEducation() == AppUser.EDU.FACULTY) {
+            AppUser faculty = new AppUser(AppUser.EDU.FACULTY, answerArray[0], answerArray[1], answerArray[2], answerArray[3], answerArray[4]);
             session.setCurrentUser(faculty);
             return faculty;
-        } else
-            throw new InstantiateUserException();
+        } else {
+            logger.debug("getEducation() isn't returning student or faculty");
+            return null;
+        }
     }
 
     //calls the appropriate repo method, depending on the newOrUpdate argument
@@ -36,22 +39,19 @@ public class UserService {
         else if(newOrUpdate.equals("update"))
             repo.update(user);
         else
-            throw new InvalidArgumentException("Argument for register() method must be 'new' or 'update'");
+            throw new IllegalArgumentException("Argument for register() method must be 'new' or 'update'");
     }
 
     public boolean usernameAvailable(String username){
-
-        if(repo.findUserByUsername(username) != null)
+        if (repo.findUserByUsername(username) == null)
             return true;
-        else
-            return false;
+        return false;
     }
 
     public boolean emailAvailable(String email){
-        if(repo.findUserByEmail(email) != null)
+        if(repo.findUserByEmail(email) == null)
             return true;
-        else
-            return false;
+        return false;
     }
 
     public boolean login(String username, String password){

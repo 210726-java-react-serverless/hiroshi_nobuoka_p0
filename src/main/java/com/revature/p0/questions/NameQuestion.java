@@ -4,7 +4,8 @@ public class NameQuestion extends Question{
     private static final String type = "name";
     private String question;
 
-    public NameQuestion(){
+    public NameQuestion(String question){
+        this.question = question;
         System.out.println(question);
     }
 
@@ -14,15 +15,11 @@ public class NameQuestion extends Question{
             System.out.println("Cannot be empty.");
             return false;
         }
-        if(!answer.matches("[a-z]")) {
+        if(!answer.matches("[a-z]+")) {
             System.out.println("Only names with English letters are considered valid. Please try again.");
             return false;
         }
         return true;
     }
 
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
 }

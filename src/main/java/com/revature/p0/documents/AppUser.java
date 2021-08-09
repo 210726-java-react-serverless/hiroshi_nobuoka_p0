@@ -1,40 +1,57 @@
 package com.revature.p0.documents;
 
-
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Objects;
 
 public class AppUser {
-    public enum Edu {STUDENT, FACULTY};
-    private String id;
-    private Edu edu;
+    public enum EDU {STUDENT, FACULTY};
+    private String edu;
+    @JsonProperty("_id") private String id;
     private String firstName;
     private String lastName;
     private String email;
     private String username;
     private String password;
-    private HashMap<String, String> fieldDirectory = new HashMap<>();
+    private HashMap<String, String> properties = new HashMap<>();
 
-    public AppUser(Edu edu, String firstName, String lastName, String email, String username, String password) {
-        this.edu = edu;
-        this.firstName = firstName;
+    @JsonCreator
+    public AppUser(
+            @JacksonInject EDU edu,
+            @JsonProperty("firstName") String firstName,
+            @JsonProperty("lastName") String lastName,
+            @JsonProperty("email") String email,
+            @JsonProperty("username") String username,
+            @JsonProperty("password") String password) {
+
+        if(edu == EDU.STUDENT)
+            this.edu = "student";
+        if(edu == EDU.FACULTY)
+            this.edu = "faculty";
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
-        fieldDirectory.put("firstname", firstName);
-        fieldDirectory.put("lastname", lastName);
-        fieldDirectory.put("email", email);
-        fieldDirectory.put("username", username);
-        fieldDirectory.put("password", password);
+        properties.put("firstname", firstName);
+        properties.put("lastname", lastName);
+        properties.put("email", email);
+        properties.put("username", username);
+        properties.put("password", password);
+        properties.put("edu", this.edu);
     }
 
-    public HashMap<String, String> getFieldDirectory() {return fieldDirectory;}
+
+
+    public HashMap<String, String> getProperties() {return properties;}
+
 
     public static Document toDocument(AppUser newUser){
-        Document newUserDoc = new Document("firstName", newUser.getFirstName())
+        Document newUserDoc = new Document("edu", newUser.getEdu())
+                .append("firstName", newUser.getFirstName())
                 .append("lastName", newUser.getLastName())
                 .append("email", newUser.getEmail())
                 .append("username", newUser.getUsername())
@@ -46,11 +63,11 @@ public class AppUser {
 
     public void setId(String id) {this.id = id;}
 
-    public Edu getEdu() {
+    public String getEdu() {
         return edu;
     }
 
-    public void setEdu(Edu edu) {
+    public void setEdu(String edu) {
         this.edu = edu;
     }
 

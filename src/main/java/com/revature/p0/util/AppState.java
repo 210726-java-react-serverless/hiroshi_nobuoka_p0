@@ -5,14 +5,15 @@ import com.revature.p0.repositories.UserRepository;
 import com.revature.p0.screens.*;
 
 import com.revature.p0.services.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class AppState {
-    static final Logger logger = LoggerFactory.getLogger(RegisterScreen.class);
+   static final Logger logger = LogManager.getLogger(AppState.class);
     private static boolean appRunning;
     private final ScreenRouter router;
 
@@ -39,6 +40,7 @@ public class AppState {
                 router.getCurrentScreen().render();
             } catch (Exception e) {
                 e.printStackTrace();
+                logger.debug("Something went wrong.");
             }
         }
     }

@@ -9,12 +9,10 @@
         </File>
     </Appenders>
     <Loggers>
-        <Root level="debug">
-            <AppenderRef ref="ConsoleAppender" />
-
-        </Root>
-        <Logger name="com.revature" level="info">
+        <Root level="info">
+            <AppenderRef ref = "ConsoleAppender"/>
             <AppenderRef ref="FileAppender"/>
-        </Logger>
+        </Root>
+
     </Loggers>
 </Configuration>

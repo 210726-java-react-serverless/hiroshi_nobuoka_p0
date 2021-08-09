@@ -6,6 +6,8 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.*;
 import com.revature.p0.exceptions.DataSourceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.Properties;
 
 public class MongoClientFactory {
-
+    static final Logger logger = LogManager.getLogger(MongoClientFactory.class);
     private final MongoClient mongoClient;
     private static final MongoClientFactory mongoClientFactory = new MongoClientFactory();
 
@@ -29,21 +31,21 @@ public class MongoClientFactory {
             String username = appProperties.getProperty("username");
             char[] password = appProperties.getProperty("password").toCharArray();
 
-            List<ServerAddress> hosts = Collections.singletonList(new ServerAddress(ipAddress, port));
-            MongoCredential credentials = MongoCredential.createScramSha1Credential(username, dbName, password);
+            List<ServerAddress> hosts = Collections.singletonList(new ServerAddress("18.224.215.51", port));
+            MongoCredential credentials = MongoCredential.createScramSha1Credential("hiroshin", "ProjectZero", "revature".toCharArray());
             MongoClientSettings settings = MongoClientSettings.builder()
                                                                 .applyToClusterSettings(builder -> builder.hosts(hosts))
                                                                 .credential(credentials)
                                                                 .build();
 
-            this.mongoClient = MongoClients.create(settings);
+            this.mongoClient = MongoClients.create(settings); logger.info("client creation attempt made.");
 
         } catch (FileNotFoundException fnfe){
-            fnfe.printStackTrace(); //TODO log this file
+            fnfe.printStackTrace();
             throw new DataSourceException("Unable to load database properties file.", fnfe);
         } catch (Exception e){
-            e.printStackTrace(); //TODO log this file
-            throw new DataSourceException("An unexpect exception occured." ,e);
+            e.printStackTrace();
+            throw new DataSourceException("An unexpected exception occurred." ,e);
 
         }
 

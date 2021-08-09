@@ -1,6 +1,5 @@
 package com.revature.p0.util;
 
-import com.revature.p0.exceptions.InvalidArgumentException;
 import com.revature.p0.questions.*;
 import com.revature.p0.services.UserService;
 
@@ -21,13 +20,11 @@ public class QuestionFactory {
         if(type.equals("email"))
             return new EmailQuestion(service);
         if(type.equals("firstname")){
-            NameQuestion firstname = new NameQuestion();
-            firstname.setQuestion("Enter your first name: ");
+            NameQuestion firstname = new NameQuestion("Enter your first name: ");
             return firstname;
         }
         if(type.equals("lastname")){
-            NameQuestion lastname = new NameQuestion();
-            lastname.setQuestion("Enter your lastname name: ");
+            NameQuestion lastname = new NameQuestion("Enter your last name: ");
             return lastname;
         }
         if(type.equals("password"))
@@ -36,7 +33,7 @@ public class QuestionFactory {
             return new UsernameQuestion(service);
         else {
             //TODO log here
-            throw new InvalidArgumentException("Cannot find question of " + type + " type");
+            throw new IllegalArgumentException("Cannot find question of " + type + " type");
         }
     }
 }

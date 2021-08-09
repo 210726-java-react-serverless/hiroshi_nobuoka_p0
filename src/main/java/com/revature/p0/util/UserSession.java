@@ -6,12 +6,12 @@ import com.revature.p0.questions.EduQuestion;
 public class UserSession {
 
     private AppUser currentUser;
-    private AppUser.Edu education;
+    private AppUser.EDU education;
 
-    public void setEducation(AppUser.Edu education){this.education = education;}
+    public void setEducation(AppUser.EDU education){this.education = education;}
 
 
-    public AppUser.Edu getEducation() {return education;}
+    public AppUser.EDU getEducation() {return education;}
 
     public AppUser getCurrentUser(){return currentUser;}
 

@@ -44,7 +44,7 @@ public class UpdateScreen {
         while(question.validAnswer(answer))
             answer = reader.readLine();
 
-        user.getFieldDirectory().replace(questionTypeArray[userEntry], answer);
+        user.getProperties().replace(questionTypeArray[userEntry], answer);
         service.register(user,"update");
     }
 }

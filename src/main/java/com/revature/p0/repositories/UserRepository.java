@@ -1,26 +1,41 @@
 package com.revature.p0.repositories;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.InjectableValues;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.client.model.Filters;
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.exceptions.DataSourceException;
 import com.revature.p0.exceptions.DocumentNotFoundException;
 import com.revature.p0.exceptions.NullFieldException;
 import com.revature.p0.util.UserSession;
+
 import org.bson.Document;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.revature.p0.util.MongoClientFactory;
 
-public class UserRepository implements CrudRepository<AppUser>{
-    private UserSession session;
-    MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-    MongoDatabase projectDb = mongoClient.getDatabase("ProjectZero");
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
-    public UserRepository(UserSession session){ this.session = session;}
+public class UserRepository implements CrudRepository<AppUser>{
+    static final Logger logger = LogManager.getLogger(UserRepository.class);
+    private UserSession session;
+    MongoClient mongoClient;
+    MongoDatabase projectDb;
+
+    public UserRepository(UserSession session){
+        MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+        MongoDatabase projectDb = mongoClient.getDatabase("ProjectZero");
+        this.mongoClient = mongoClient;
+        this.projectDb = projectDb;
+        this.session = session;
+    }
 
     public AppUser findUserByCredentials(String username, String password){
 
@@ -51,24 +66,25 @@ public class UserRepository implements CrudRepository<AppUser>{
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
             ObjectMapper mapper = new ObjectMapper();
-            AppUser queriedUser;
             Document queryDoc = userCollection.find(new BasicDBObject("username", username)).first();
-
-            return queriedUser = mapper.readValue(queryDoc.toJson(), AppUser.class);
+            AppUser queriedUser = mapper.readValue(queryDoc.toJson(), AppUser.class);
+            return queriedUser;
             //return new AppUser(session.getEducation(), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
                    // queryDoc.get("username").toString(), queryDoc.get("password").toString());
 
         } catch (NullPointerException npe){
-            npe.printStackTrace();
-            throw new DataSourceException("Database, collection, or username not found", npe);
+            logger.info("Username not found");
+            return null;
         } catch (JsonMappingException jme){
             jme.printStackTrace();
             throw new DataSourceException("Json mapping exception", jme);
         } catch (JsonProcessingException jpe){
             jpe.printStackTrace();;
             throw new DataSourceException("Json processing exception", jpe);
+        } catch (Exception e){
+            e.printStackTrace();
         }
-
+        return null;
     }
 
     public AppUser findUserByEmail(String email) {
@@ -76,16 +92,22 @@ public class UserRepository implements CrudRepository<AppUser>{
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
             ObjectMapper mapper = new ObjectMapper();
-            AppUser queriedUser;
             Document queryDoc = userCollection.find(new BasicDBObject("email", email)).first();
-
-            return queriedUser = mapper.readValue(queryDoc.toJson(), AppUser.class);
+            //AppUser constructor takes an enum as an argument. Since the key associated with the enum has a string value, @Jacksoninject used to facilitate unmarshalling.
+            InjectableValues inject;
+            if(queryDoc.get("edu").equals("student"))
+                inject = new InjectableValues.Std().addValue(AppUser.EDU.class, AppUser.EDU.STUDENT);
+            else
+                inject = new InjectableValues.Std().addValue(AppUser.EDU.class, AppUser.EDU.FACULTY);
+            System.out.println(queryDoc.toJson());
+            AppUser queriedUser = mapper.reader(inject).forType(AppUser.class).readValue(queryDoc.toJson());
+            return queriedUser;
             //return new AppUser(session.getEducation(), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
                     //queryDoc.get("username").toString(), queryDoc.get("password").toString()); //TODO delete if Jackson works
 
         } catch (NullPointerException npe) {
-            npe.printStackTrace();
-            throw new DataSourceException("Database or colletion not found", npe);
+            logger.info("email address not found in database");
+            return null;
         } catch (JsonMappingException jme){
         jme.printStackTrace();
         throw new DataSourceException("Json mapping exception", jme);
@@ -98,12 +120,14 @@ public class UserRepository implements CrudRepository<AppUser>{
     public MongoCollection<Document> chooseCollection(MongoDatabase db){
         try {
             //Refers to the active user's education to determine which collection to query
-            if (session.getEducation().equals(AppUser.Edu.STUDENT))
+            if (session.getEducation().equals(AppUser.EDU.STUDENT)){
+                logger.info("Student collection accessed");
                 return db.getCollection("student");
-            else if (session.getEducation().equals(AppUser.Edu.FACULTY))
+            }
+            else if (session.getEducation().equals(AppUser.EDU.FACULTY)) {
+                logger.info("Faculty collection accessed");
                 return db.getCollection("faculty");
-            else
-                throw new NullFieldException("AppUser's education is not provided.");
+            }
         } catch (NullPointerException npe){
             npe.printStackTrace();//TODO log, include message that database returns null
         }
@@ -139,13 +163,16 @@ public class UserRepository implements CrudRepository<AppUser>{
         try {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
             //Check to make sure user does not already exist in database.
-            Document queryDoc = userCollection.find(new BasicDBObject("_id", newUser.getId())).first();//TODO log content of this doc
-            if(queryDoc != null)
-                throw new RuntimeException("You tried to register a user that already exists.");
+            Document queryDoc = userCollection.find(new BasicDBObject("_id", newUser.getId())).first();
+            if(queryDoc != null) {
+                throw new RuntimeException(newUser.getId()+" already exists in "+userCollection.toString());
+            }
             //Create user document and save to database.
             Document newUserDoc = AppUser.toDocument(newUser);
             userCollection.insertOne(newUserDoc);
             newUser.setId(newUserDoc.get("_id").toString());
+            logger.info("username "+newUser.getUsername()+" persisted to "+userCollection.getNamespace()+" with id "+newUser.getId());
+
 
         } catch (Exception e) {
             e.printStackTrace(); // TODO log this to a file

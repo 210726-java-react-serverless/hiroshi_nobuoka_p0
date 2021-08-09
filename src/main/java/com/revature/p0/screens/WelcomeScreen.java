@@ -2,13 +2,16 @@ package com.revature.p0.screens;
 
 import com.revature.p0.questions.NavigateScreenQuestion;
 import com.revature.p0.util.ScreenRouter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import java.io.BufferedReader;
-import java.io.IOException;
+
 
 
 public class WelcomeScreen extends Screen{
-
+    static final Logger logger = LogManager.getLogger(WelcomeScreen.class);
     private BufferedReader reader;
     protected ScreenRouter screenRouter;
 
@@ -18,7 +21,7 @@ public class WelcomeScreen extends Screen{
         this.screenRouter = screenRouter;
         }
 
-    public void render() throws IOException {
+    public void render() throws Exception {
         String menu = "Welcome to the Hiroshi's Console Application!\n"+
                 "\nPlease select from the following:\n"+
                 "1) Login\n" +
