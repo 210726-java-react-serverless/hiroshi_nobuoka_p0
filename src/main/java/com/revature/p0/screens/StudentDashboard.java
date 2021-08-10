@@ -19,7 +19,7 @@ public class StudentDashboard extends Screen{
     @Override
     public void render() throws Exception {
         System.out.println("You are on the Student Dashboard.\n");
-        String menu = "1)Register for classes\n"+
+        String menu = "1)Register for a course\n"+
                 "2)Print schedule\n"+
                 "3)Update personal info\n"+
                 "4)Back\n";
@@ -32,7 +32,7 @@ public class StudentDashboard extends Screen{
 
         switch(userInput){
             case "1":
-                router.navigate("/creg");
+                router.navigate("/sreg");
                 break;
             case "2":
                 //TODO add schedule implementation

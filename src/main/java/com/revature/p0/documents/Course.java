@@ -11,12 +11,11 @@ public class Course {
     private AppUser instructor;
     private int enrolled;
 
-    public Course(String courseId, String courseTag, String courseName, AppUser instructor, int enrolled) {
+    public Course(String courseId, String courseTag, String courseName, AppUser instructor) {
         this.courseId = courseId;
         this.courseTag = courseTag;
         this.courseName = courseName;
         this.instructor = instructor;
-        this.enrolled = enrolled;
     }
 
     public String getCourseId() {
