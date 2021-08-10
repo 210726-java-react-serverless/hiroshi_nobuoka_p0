@@ -1,5 +1,6 @@
 package com.revature.p0.screens;
 
+import com.revature.p0.documents.AppUser;
 import com.revature.p0.questions.EduQuestion;
 import com.revature.p0.questions.NavigateScreenQuestion;
 import com.revature.p0.services.UserService;
@@ -58,10 +59,18 @@ public class LoginScreen extends Screen {
         String username = reader.readLine();
         qfactory.getQuestion("password",service);
         String password = reader.readLine();
-        if(service.login(username, password)) {
-            System.out.println("Login successful!\n");
-            router.navigate("/welcome");
-        } else {
+
+        AppUser user = service.login(username, password);
+
+        //Called an arbitrary getter to invoke NPE if user authentication failed. Otherwise, navigate user to correct dash.
+        try{
+            user.getUsername();
+            System.out.println("Login successful!");
+            if (user.getEdu().equals("STUDENT"))
+                router.navigate("/sdash");
+            router.navigate("/fdash");
+
+        }catch(NullPointerException npe){
             System.out.println("Login attempt failed. Please try again.");
             router.navigate("/login");
         }

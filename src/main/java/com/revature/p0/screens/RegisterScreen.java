@@ -1,7 +1,5 @@
 package com.revature.p0.screens;
 
-
-
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.questions.*;
 import com.revature.p0.services.UserService;
@@ -34,7 +32,8 @@ public class RegisterScreen extends Screen {
                 + "\n 1)Register \t 2)Return";
 
         System.out.println(menu);
-        //factory doesn't include NavigateScreen question b/c of its dynamic argument.
+
+        //Get user input
         Question prompt = new NavigateScreenQuestion(2);
         String userInput = reader.readLine();
         while (!prompt.validAnswer(userInput)) {
@@ -48,23 +47,22 @@ public class RegisterScreen extends Screen {
                 router.previousScreen();
                 return;
         }
-
+        //Determine if student or faculty.
         EduQuestion eduQuestion = new EduQuestion(session);
         String edu = reader.readLine();
         while(!eduQuestion.validAnswer(edu)){
             edu = reader.readLine();
         }
 
-
         String[] questionTypeArray = {"firstname", "lastname", "email", "username", "password"};
         String[] answerArray = new String[questionTypeArray.length];
 
+        //Loop through questions, store answer in answerArray.
         for (int i = 0; i < questionTypeArray.length; i++) {
             Question question = qFactory.getQuestion(questionTypeArray[i],service);
             String answer = reader.readLine();
             while (!question.validAnswer(answer)) {answer = reader.readLine();}
             answerArray[i] = answer;
-
         }
 
             AppUser newUser = service.createAppUser(answerArray);
@@ -72,8 +70,12 @@ public class RegisterScreen extends Screen {
 
             service.register(newUser, "new");
             System.out.println("Registration successful!");
-            router.navigate("/welcome");
-        }
 
+            //navigate to appropriate dashboard
+            if(newUser.getEdu().equals("STUDENT"))
+                router.navigate("/sdash");
+            router.navigate("/fdash");
+        }
+    //TODO (optional) allow user to exit registration during questioning
 }
 

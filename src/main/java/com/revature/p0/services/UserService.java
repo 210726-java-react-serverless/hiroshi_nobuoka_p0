@@ -54,12 +54,11 @@ public class UserService {
         return false;
     }
 
-    public boolean login(String username, String password){
+    public AppUser login(String username, String password){
         AppUser authUser = repo.findUserByCredentials(username, password);
-        if(authUser == null)
-            return false;
-        session.setCurrentUser(authUser);
-        return true;
+        if(authUser != null)
+            session.setCurrentUser(authUser);
+        return authUser;
     }
 
     
