@@ -29,6 +29,7 @@ public class AppState {
         router.addScreen(new WelcomeScreen(reader, router));
         router.addScreen(new LoginScreen(reader, router, service, session));
         router.addScreen(new RegisterScreen(reader,router,service, session));
+        router.addScreen(new StudentDashboard(reader,router, service, session));
     }
 
     public void startup() {

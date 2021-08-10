@@ -38,10 +38,10 @@ public class LoginScreen extends Screen {
         System.out.println(menu);
         NavigateScreenQuestion askUserInput = new NavigateScreenQuestion(2);
         String userInput = reader.readLine();
-        while(!askUserInput.validAnswer(userInput)){
+        while (!askUserInput.validAnswer(userInput)) {
             userInput = reader.readLine();
         }
-        switch(userInput){
+        switch (userInput) {
             case "1":
                 break;
             case "2":
@@ -51,28 +51,28 @@ public class LoginScreen extends Screen {
 
         EduQuestion eduQuestion = new EduQuestion(session);
         String edu = reader.readLine();
-        while(!eduQuestion.validAnswer(edu)){
+        while (!eduQuestion.validAnswer(edu)) {
             edu = reader.readLine();
         }
 
-        qfactory.getQuestion("username",service);
+        qfactory.getQuestion("username", service);
         String username = reader.readLine();
-        qfactory.getQuestion("password",service);
+        qfactory.getQuestion("password", service);
         String password = reader.readLine();
 
         AppUser user = service.login(username, password);
 
-        //Called an arbitrary getter to invoke NPE if user authentication failed. Otherwise, navigate user to correct dash.
-        try{
-            user.getUsername();
-            System.out.println("Login successful!");
-            if (user.getEdu().equals("STUDENT"))
-                router.navigate("/sdash");
-            router.navigate("/fdash");
-
-        }catch(NullPointerException npe){
+        if (user == null) {
             System.out.println("Login attempt failed. Please try again.");
             router.navigate("/login");
+        } else {
+            System.out.println("Login successful!");
+            if (user.getEdu().equals("STUDENT")) {
+                logger.info("user is a student");
+                router.navigate("/sdash");
+            } else {router.navigate("/welcome");}
         }
+
     }
 }
+

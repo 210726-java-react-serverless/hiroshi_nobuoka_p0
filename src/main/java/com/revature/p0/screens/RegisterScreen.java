@@ -74,7 +74,8 @@ public class RegisterScreen extends Screen {
             //navigate to appropriate dashboard
             if(newUser.getEdu().equals("STUDENT"))
                 router.navigate("/sdash");
-            router.navigate("/fdash");
+            else
+                router.navigate("/fdash");
         }
     //TODO (optional) allow user to exit registration during questioning
 }
