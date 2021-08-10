@@ -13,14 +13,12 @@ public class StudentDashboard extends Screen{
     private ScreenRouter router;
     private UserSession session;
     private BufferedReader reader;
-    QuestionFactory qFactory = QuestionFactory.getInstance();
 
 
-    public StudentDashboard(BufferedReader reader, ScreenRouter router, UserService service, UserSession session) {
+
+    public StudentDashboard(BufferedReader reader, ScreenRouter router) {
         super("Student Dashboard", "/sdash", reader, router);
-        this.service = service;
         this.router = router;
-        this.session = session;
         this.reader = reader;
     }
 
@@ -40,7 +38,7 @@ public class StudentDashboard extends Screen{
 
         switch(userInput){
             case "1":
-                router.navigate("/class");
+                router.navigate("/creg");
                 break;
             case "2":
                 //TODO add schedule implementation

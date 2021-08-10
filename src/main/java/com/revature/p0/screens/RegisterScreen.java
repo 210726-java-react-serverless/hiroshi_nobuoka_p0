@@ -15,7 +15,6 @@ import java.io.BufferedReader;
 
 public class RegisterScreen extends Screen {
     static final Logger logger = LogManager.getLogger(RegisterScreen.class);
-    private BufferedReader reader;
     private final UserService service;
     private UserSession session;
     QuestionFactory qFactory = QuestionFactory.getInstance();
@@ -24,7 +23,6 @@ public class RegisterScreen extends Screen {
         super("Register Screen", "/register",reader,router);
         this.service = service;
         this.session = session;
-        this.reader = reader;
     }
 
     public void render() throws Exception {

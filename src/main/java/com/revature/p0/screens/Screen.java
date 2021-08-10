@@ -9,13 +9,13 @@ public abstract class Screen {
 
     protected String name;
     protected String route;
-    protected BufferedReader consoleReader;
+    protected BufferedReader reader;
     protected ScreenRouter router;
 
     public Screen(String name, String route, BufferedReader reader, ScreenRouter router) {
         this.name = name;
         this.route = route;
-        this.consoleReader = consoleReader;
+        this.reader = reader;
         this.router = router;
     }
 
