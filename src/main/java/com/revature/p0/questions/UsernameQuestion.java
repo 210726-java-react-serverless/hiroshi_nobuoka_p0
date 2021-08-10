@@ -16,11 +16,11 @@ public class UsernameQuestion extends Question{
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()) {
             //TODO include Log for answer
-            System.out.println("Cannot be empty.");
+            System.out.println("Cannot be empty. Try again: ");
             return false;
         }
         if(!service.usernameAvailable(answer)) {
-            System.out.println("Username not available.");
+            System.out.println("Username not available. Try again: ");
             return false;
         }
         return true;

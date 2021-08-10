@@ -1,14 +1,9 @@
 package com.revature.p0.repositories;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.exceptions.DataSourceException;
 import com.revature.p0.exceptions.DocumentNotFoundException;
-import com.revature.p0.exceptions.NullFieldException;
 import com.revature.p0.util.UserSession;
 
 import org.bson.Document;
@@ -65,50 +60,33 @@ public class UserRepository implements CrudRepository<AppUser>{
         try {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
-            ObjectMapper mapper = new ObjectMapper();
             Document queryDoc = userCollection.find(new BasicDBObject("username", username)).first();
-            AppUser queriedUser = mapper.readValue(queryDoc.toJson(), AppUser.class);
+            AppUser queriedUser = new AppUser(AppUser.EDU.fromString(queryDoc.get("edu").toString()), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
+                    queryDoc.get("username").toString(), queryDoc.get("password").toString());
             return queriedUser;
-            //return new AppUser(session.getEducation(), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
-                   // queryDoc.get("username").toString(), queryDoc.get("password").toString());
 
         } catch (NullPointerException npe){
             logger.info("Username not found");
             return null;
-        } catch (JsonMappingException jme){
-            jme.printStackTrace();
-            throw new DataSourceException("Json mapping exception", jme);
-        } catch (JsonProcessingException jpe){
-            jpe.printStackTrace();;
-            throw new DataSourceException("Json processing exception", jpe);
-        } catch (Exception e){
-            e.printStackTrace();
         }
-        return null;
     }
 
     public AppUser findUserByEmail(String email) {
         try {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
-            ObjectMapper mapper = new ObjectMapper();
+
             BasicDBObject name = new BasicDBObject("email", email);
             Document queryDoc = userCollection.find(name).first();
 
-            AppUser queriedUser = mapper.readValue(queryDoc.toJson(), AppUser.class);
+            AppUser queriedUser= new AppUser(AppUser.EDU.fromString(queryDoc.get("edu").toString()), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
+                    queryDoc.get("username").toString(), queryDoc.get("password").toString());
             return queriedUser;
-            //return new AppUser(session.getEducation(), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
-                    //queryDoc.get("username").toString(), queryDoc.get("password").toString()); //TODO delete if Jackson works
+
 
         } catch (NullPointerException npe) {
             logger.info("email address not found in database");
             return null;
-        } catch (JsonMappingException jme){
-        jme.printStackTrace();
-        throw new DataSourceException("Json mapping exception", jme);
-        } catch (JsonProcessingException jpe){
-        jpe.printStackTrace();;
-        throw new DataSourceException("Json processing exception", jpe);
         }
     }
 
@@ -134,7 +112,6 @@ public class UserRepository implements CrudRepository<AppUser>{
         try {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
-            //ObjectMapper mapper = new ObjectMapper();
             Document queryDoc = userCollection.find(new BasicDBObject("_id", id)).first();//TODO key may be incorrect, make sure to test
             AppUser queriedUser= new AppUser(AppUser.EDU.fromString(queryDoc.get("edu").toString()), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
                     queryDoc.get("username").toString(), queryDoc.get("password").toString());
@@ -142,13 +119,7 @@ public class UserRepository implements CrudRepository<AppUser>{
         } catch (NullPointerException npe) {
             npe.printStackTrace();
             throw new DataSourceException("Database or collection not found", npe);
-        } /*catch (JsonMappingException jme){
-            jme.printStackTrace();
-            throw new DataSourceException("Json mapping exception", jme);
-        } catch (JsonProcessingException jpe){
-            jpe.printStackTrace();;
-            throw new DataSourceException("Json processing exception", jpe);
-        }*/
+        }
     }
 
     @Override

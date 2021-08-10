@@ -19,15 +19,15 @@ public class EmailQuestion extends Question{
             return false;
         }
         if(answer.indexOf("@") == -1) {
-            System.out.println("Must enter a valid email address.");
+            System.out.println("No '@'. Try again: ");
             return false;
         }
         if(!answer.endsWith(".com")) {
-            System.out.println("Must enter a valid email address.\n");
+            System.out.println("No dot com, try again: ");
             return false;
         }
         if(!service.emailAvailable(answer)){
-            System.out.println("Email already being used.");
+            System.out.println("Email already being used. Please enter a different one:");
             return false;
         }
         return true;
