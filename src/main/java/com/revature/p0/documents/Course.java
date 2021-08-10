@@ -1,6 +1,7 @@
 package com.revature.p0.documents;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bson.Document;
 
 import java.util.Objects;
 
@@ -8,14 +9,20 @@ public class Course {
     @JsonProperty("_id")private String courseId;
     private String courseTag;
     private String courseName;
-    private AppUser instructor;
+    private String instructor;
     private int enrolled;
 
-    public Course(String courseId, String courseTag, String courseName, AppUser instructor) {
-        this.courseId = courseId;
+    public Course(String courseTag, String courseName, String instructor) {
         this.courseTag = courseTag;
         this.courseName = courseName;
         this.instructor = instructor;
+    }
+    public Document toDocument(){
+
+        Document newUserDoc = new Document("coursetag", this.getCourseTag())
+                .append("coursename", this.getCourseName())
+                .append("instructor", this.getInstructor());
+        return newUserDoc;
     }
 
     public String getCourseId() {
@@ -42,11 +49,11 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public AppUser getInstructor() {
+    public String getInstructor() {
         return instructor;
     }
 
-    public void setInstructor(AppUser instructor) {
+    public void setInstructor(String instructor) {
         this.instructor = instructor;
     }
 

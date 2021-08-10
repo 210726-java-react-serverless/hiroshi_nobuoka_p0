@@ -19,6 +19,10 @@ public class CourseTagQuestion extends Question {
             System.out.println("Tag must start with three capital letters and end with four numbers. Try again: ");
             return false;
         }
+        if(!service.courseTagAvailable(answer)){
+            System.out.println("Tag already being used. Please enter a different one:");
+            return false;
+        }
         return true;
     }
 

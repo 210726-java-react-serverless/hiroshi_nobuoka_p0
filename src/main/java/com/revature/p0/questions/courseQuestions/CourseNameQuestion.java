@@ -9,8 +9,7 @@ public class CourseNameQuestion extends Question {
     private String question = "Enter the full name of the course: ";
     private CourseService service;
 
-    public CourseNameQuestion(CourseService service){
-        this.service = service;
+    public CourseNameQuestion(){
         System.out.println(question);
     }
 

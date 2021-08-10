@@ -1,10 +1,13 @@
 package com.revature.p0.util;
 
 import com.revature.p0.questions.*;
+import com.revature.p0.questions.courseQuestions.CourseNameQuestion;
+import com.revature.p0.questions.courseQuestions.CourseTagQuestion;
 import com.revature.p0.questions.userQuestions.EmailQuestion;
 import com.revature.p0.questions.userQuestions.NameQuestion;
 import com.revature.p0.questions.userQuestions.PasswordQuestion;
 import com.revature.p0.questions.userQuestions.UsernameQuestion;
+import com.revature.p0.services.CourseService;
 import com.revature.p0.services.UserService;
 
 
@@ -34,6 +37,16 @@ public class QuestionFactory {
             return new UsernameQuestion(service);
         else {
             //TODO log here
+            throw new IllegalArgumentException("Cannot find question of " + type + " type");
+        }
+    }
+
+    public Question getCourseQuestion(String type, CourseService service){
+        if(type.equals("coursename"))
+            return new CourseNameQuestion();
+        if(type.equals("coursetag"))
+            return new CourseTagQuestion(service);
+        else{
             throw new IllegalArgumentException("Cannot find question of " + type + " type");
         }
     }

@@ -77,7 +77,6 @@ public class UserRepository implements CrudRepository<AppUser>{
         try {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
-
             BasicDBObject name = new BasicDBObject("email", email);
             Document queryDoc = userCollection.find(name).first();
 

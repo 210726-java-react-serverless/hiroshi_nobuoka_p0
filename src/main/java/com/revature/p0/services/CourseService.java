@@ -19,7 +19,7 @@ public class CourseService {
     }
 
     public Course createCourse(String[] answerArray) throws ArrayIndexOutOfBoundsException{
-        Course course = new Course(answerArray[0], answerArray[1], answerArray[2], session.getCurrentUser());
+        Course course = new Course(answerArray[0], answerArray[1], session.getCurrentUser().toString());
         return course;
     }
     public void registerCourse(Course course, String newOrUpdate) {
@@ -29,5 +29,11 @@ public class CourseService {
             repo.update(course);
         else
             throw new IllegalArgumentException("Argument for register() method must be 'new' or 'update'");
+    }
+
+    public boolean courseTagAvailable(String tag){
+        if(repo.findCourseByTag(tag) == null)
+            return true;
+        return false;
     }
 }
