@@ -5,18 +5,15 @@ import com.revature.p0.services.UserService;
 
 
 public class QuestionFactory {
-    private UserService service;
-
+    private static final QuestionFactory questionFactory = new QuestionFactory();
     /*
         Didn't include the Education question because of the UserSession dependency
         injection. Didn't include NavigateScreen question because of its dynamic
         numberOfOptions field.
      */
-    public QuestionFactory(UserService service){
-        this.service = service;
-    }
+    private QuestionFactory(){}
 
-    public Question getQuestion(String type){
+    public Question getQuestion(String type, UserService service){
         if(type.equals("email"))
             return new EmailQuestion(service);
         if(type.equals("firstname")){
@@ -36,4 +33,6 @@ public class QuestionFactory {
             throw new IllegalArgumentException("Cannot find question of " + type + " type");
         }
     }
+
+    public static QuestionFactory getInstance(){ return questionFactory; }
 }

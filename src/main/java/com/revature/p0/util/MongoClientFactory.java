@@ -25,14 +25,14 @@ public class MongoClientFactory {
 
         try{
             appProperties.load(new FileReader("src/main/resources/application.properties"));
-            String ipAddress = appProperties.getProperty("ip address");
+            String ipAddress = appProperties.getProperty("ipaddress");
             int port = Integer.parseInt(appProperties.getProperty("port"));
             String dbName = appProperties.getProperty("dbName");
             String username = appProperties.getProperty("username");
             char[] password = appProperties.getProperty("password").toCharArray();
 
-            List<ServerAddress> hosts = Collections.singletonList(new ServerAddress("18.224.215.51", port));
-            MongoCredential credentials = MongoCredential.createScramSha1Credential("hiroshin", "ProjectZero", "revature".toCharArray());
+            List<ServerAddress> hosts = Collections.singletonList(new ServerAddress(ipAddress, port));
+            MongoCredential credentials = MongoCredential.createScramSha1Credential(username, dbName, password);
             MongoClientSettings settings = MongoClientSettings.builder()
                                                                 .applyToClusterSettings(builder -> builder.hosts(hosts))
                                                                 .credential(credentials)

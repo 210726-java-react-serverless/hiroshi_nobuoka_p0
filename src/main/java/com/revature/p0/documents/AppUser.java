@@ -1,15 +1,19 @@
 package com.revature.p0.documents;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.Document;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class AppUser {
-    public enum EDU {STUDENT, FACULTY};
+    public enum EDU {
+        STUDENT, FACULTY;
+        public static EDU fromString(String name) {
+            for (EDU medium : EDU.values()) {
+                if (medium.toString().equals(name)) {return medium;}
+            } return null;
+        }
+    }
     private String edu;
     @JsonProperty("_id") private String id;
     private String firstName;
@@ -19,19 +23,18 @@ public class AppUser {
     private String password;
     private HashMap<String, String> properties = new HashMap<>();
 
-    @JsonCreator
-    public AppUser(
-            @JacksonInject EDU edu,
-            @JsonProperty("firstName") String firstName,
-            @JsonProperty("lastName") String lastName,
-            @JsonProperty("email") String email,
-            @JsonProperty("username") String username,
-            @JsonProperty("password") String password) {
+    public AppUser(){}
 
-        if(edu == EDU.STUDENT)
-            this.edu = "student";
-        if(edu == EDU.FACULTY)
-            this.edu = "faculty";
+    public AppUser(
+            EDU edu,
+            String firstName,
+            String lastName,
+            String email,
+            String username,
+            String password) {
+
+        this.edu = edu.toString();
+        this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
@@ -44,20 +47,18 @@ public class AppUser {
         properties.put("edu", this.edu);
     }
 
+    public Document toDocument(){
 
-
-    public HashMap<String, String> getProperties() {return properties;}
-
-
-    public static Document toDocument(AppUser newUser){
-        Document newUserDoc = new Document("edu", newUser.getEdu())
-                .append("firstName", newUser.getFirstName())
-                .append("lastName", newUser.getLastName())
-                .append("email", newUser.getEmail())
-                .append("username", newUser.getUsername())
-                .append("password", newUser.getPassword());
+        Document newUserDoc = new Document("edu", this.getEdu())
+                .append("firstName", this.getFirstName())
+                .append("lastName", this.getLastName())
+                .append("email", this.getEmail())
+                .append("username", this.getUsername())
+                .append("password", this.getPassword());
         return newUserDoc;
     }
+
+    public HashMap<String, String> getProperties() {return properties;}
 
     public String getId() {return id;}
 
@@ -111,17 +112,6 @@ public class AppUser {
         this.password = password;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AppUser appUser = (AppUser) o;
-        return id == appUser.id && edu == appUser.edu && Objects.equals(firstName, appUser.firstName) && Objects.equals(lastName, appUser.lastName) && Objects.equals(email, appUser.email) && Objects.equals(username, appUser.username) && Objects.equals(password, appUser.password);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, edu, firstName, lastName, email, username, password);
-    }
 }
 

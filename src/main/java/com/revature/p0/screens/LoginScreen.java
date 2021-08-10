@@ -1,9 +1,11 @@
 package com.revature.p0.screens;
 
+import com.revature.p0.questions.EduQuestion;
 import com.revature.p0.questions.NavigateScreenQuestion;
 import com.revature.p0.services.UserService;
 import com.revature.p0.util.QuestionFactory;
 import com.revature.p0.util.ScreenRouter;
+import com.revature.p0.util.UserSession;
 
 import java.io.BufferedReader;
 
@@ -11,12 +13,14 @@ public class LoginScreen extends Screen {
     private final UserService service;
     private BufferedReader reader;
     private ScreenRouter router;
-    private final QuestionFactory qfactory;
+    private UserSession session;
+    QuestionFactory qfactory = QuestionFactory.getInstance();
 
-    public LoginScreen(BufferedReader reader, ScreenRouter router, UserService service) {
+    public LoginScreen(BufferedReader reader, ScreenRouter router, UserService service, UserSession session) {
         super("LoginScreen", "/login", reader, router);
         this.service = service;
-        qfactory = new QuestionFactory(service);
+        this.reader= reader;
+        this.session = session;
     }
 
     @Override
@@ -40,9 +44,15 @@ public class LoginScreen extends Screen {
                 return;
         }
 
-        qfactory.getQuestion("username");
+        EduQuestion eduQuestion = new EduQuestion(session);
+        String edu = reader.readLine();
+        while(!eduQuestion.validAnswer(edu)){
+            edu = reader.readLine();
+        }
+
+        qfactory.getQuestion("username",service);
         String username = reader.readLine();
-        qfactory.getQuestion("password");
+        qfactory.getQuestion("password",service);
         String password = reader.readLine();
         if(service.login(username, password)) {
             System.out.println("Login successful!\n");

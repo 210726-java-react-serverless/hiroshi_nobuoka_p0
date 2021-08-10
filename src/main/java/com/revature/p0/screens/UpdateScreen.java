@@ -14,6 +14,7 @@ public class UpdateScreen {
     private ScreenRouter router;
     private UserSession session;
     private BufferedReader reader;
+    QuestionFactory qFactory = QuestionFactory.getInstance();
 
     public UpdateScreen(UserService service, ScreenRouter router, UserSession session, BufferedReader reader){
         this.service = service;
@@ -35,13 +36,13 @@ public class UpdateScreen {
                 "1)First Name\t  2)Last Name\t 3)Email\n4)Username\t 5)Password";
 
         int userEntry = Integer.parseInt(reader.readLine());
-        QuestionFactory qFactory = new QuestionFactory(service);
+
         String[] questionTypeArray = {"firstname", "lastname", "email", "username", "password"};
         //TODO updating password should not allow for duplication.
 
-        Question question = qFactory.getQuestion(questionTypeArray[userEntry]);
+        Question question = qFactory.getQuestion(questionTypeArray[userEntry], service);
         String answer = reader.readLine();
-        while(question.validAnswer(answer))
+        while(!question.validAnswer(answer))
             answer = reader.readLine();
 
         user.getProperties().replace(questionTypeArray[userEntry], answer);

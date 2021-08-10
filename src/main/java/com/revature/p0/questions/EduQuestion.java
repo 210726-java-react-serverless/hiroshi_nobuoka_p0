@@ -17,12 +17,12 @@ public class EduQuestion extends Question{
     }
 
     public boolean validAnswer(String answer){
-        if(answer.trim().toUpperCase().equals(AppUser.EDU.STUDENT.toString())) {
+        if(answer.trim().toLowerCase().equals("student")) {
             session.setEducation(AppUser.EDU.STUDENT);
             return true;
         }
-        if(answer.trim().toUpperCase().equals(AppUser.EDU.FACULTY.toString())) {
-            session.setEducation(AppUser.EDU.STUDENT);
+        if(answer.trim().toLowerCase().equals("faculty")) {
+            session.setEducation(AppUser.EDU.FACULTY);
             return true;
         } else
             System.out.println("Please enter either 'student' or 'faculty'.");
