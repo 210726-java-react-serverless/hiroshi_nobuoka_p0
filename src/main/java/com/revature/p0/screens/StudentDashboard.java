@@ -1,20 +1,14 @@
 package com.revature.p0.screens;
 
 import com.revature.p0.questions.NavigateScreenQuestion;
-import com.revature.p0.services.UserService;
-import com.revature.p0.util.QuestionFactory;
 import com.revature.p0.util.ScreenRouter;
-import com.revature.p0.util.UserSession;
+
 
 import java.io.BufferedReader;
 
 public class StudentDashboard extends Screen{
-    private UserService service;
     private ScreenRouter router;
-    private UserSession session;
     private BufferedReader reader;
-
-
 
     public StudentDashboard(BufferedReader reader, ScreenRouter router) {
         super("Student Dashboard", "/sdash", reader, router);
