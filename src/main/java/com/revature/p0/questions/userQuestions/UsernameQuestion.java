@@ -1,8 +1,9 @@
-package com.revature.p0.questions;
+package com.revature.p0.questions.userQuestions;
 
+import com.revature.p0.questions.Question;
 import com.revature.p0.services.UserService;
 
-public class UsernameQuestion extends Question{
+public class UsernameQuestion extends Question {
     private static final String type = "username";
     private String question ="Enter your username: ";
     private UserService service;

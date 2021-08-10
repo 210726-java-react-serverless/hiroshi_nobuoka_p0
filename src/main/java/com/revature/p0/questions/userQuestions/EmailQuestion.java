@@ -1,8 +1,9 @@
-package com.revature.p0.questions;
+package com.revature.p0.questions.userQuestions;
 
+import com.revature.p0.questions.Question;
 import com.revature.p0.services.UserService;
 
-public class EmailQuestion extends Question{
+public class EmailQuestion extends Question {
     private static final String type = "email";
     private String question = "Enter your email address: ";
     private UserService service;

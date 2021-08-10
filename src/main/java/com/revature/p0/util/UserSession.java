@@ -1,7 +1,6 @@
 package com.revature.p0.util;
 
 import com.revature.p0.documents.AppUser;
-import com.revature.p0.questions.EduQuestion;
 
 public class UserSession {
 

@@ -1,7 +1,7 @@
 package com.revature.p0.screens;
 
 import com.revature.p0.documents.AppUser;
-import com.revature.p0.questions.EduQuestion;
+import com.revature.p0.questions.userQuestions.EduQuestion;
 import com.revature.p0.questions.NavigateScreenQuestion;
 import com.revature.p0.services.UserService;
 import com.revature.p0.util.QuestionFactory;

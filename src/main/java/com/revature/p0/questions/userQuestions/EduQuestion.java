@@ -1,12 +1,13 @@
-package com.revature.p0.questions;
+package com.revature.p0.questions.userQuestions;
 
 import com.revature.p0.documents.AppUser;
+import com.revature.p0.questions.Question;
 import com.revature.p0.util.UserSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-public class EduQuestion extends Question{
+public class EduQuestion extends Question {
     static final Logger logger = LogManager.getLogger(EduQuestion.class);
     private String question = "Are you a student or a faculty member? Enter 'student' or 'faculty' below: >";
     private UserSession session;

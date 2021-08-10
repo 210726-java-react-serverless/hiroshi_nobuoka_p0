@@ -1,6 +1,10 @@
 package com.revature.p0.util;
 
 import com.revature.p0.questions.*;
+import com.revature.p0.questions.userQuestions.EmailQuestion;
+import com.revature.p0.questions.userQuestions.NameQuestion;
+import com.revature.p0.questions.userQuestions.PasswordQuestion;
+import com.revature.p0.questions.userQuestions.UsernameQuestion;
 import com.revature.p0.services.UserService;
 
 

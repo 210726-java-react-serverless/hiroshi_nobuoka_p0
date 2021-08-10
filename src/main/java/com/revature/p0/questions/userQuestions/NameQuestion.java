@@ -1,6 +1,8 @@
-package com.revature.p0.questions;
+package com.revature.p0.questions.userQuestions;
 
-public class NameQuestion extends Question{
+import com.revature.p0.questions.Question;
+
+public class NameQuestion extends Question {
     private static final String type = "name";
     private String question;
 
