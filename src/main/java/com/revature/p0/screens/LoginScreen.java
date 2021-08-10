@@ -62,7 +62,7 @@ public class LoginScreen extends Screen {
             System.out.println("Login successful!\n");
             router.navigate("/welcome");
         } else {
-            System.out.println("Login attempt failed. Please try again.\n");
+            System.out.println("Login attempt failed. Please try again.");
             router.navigate("/login");
         }
     }
