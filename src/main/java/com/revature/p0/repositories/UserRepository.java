@@ -93,14 +93,8 @@ public class UserRepository implements CrudRepository<AppUser>{
 
             ObjectMapper mapper = new ObjectMapper();
             Document queryDoc = userCollection.find(new BasicDBObject("email", email)).first();
-            //AppUser constructor takes an enum as an argument. Since the key associated with the enum has a string value, @Jacksoninject used to facilitate unmarshalling.
-            InjectableValues inject;
-            if(queryDoc.get("edu").equals("student"))
-                inject = new InjectableValues.Std().addValue(AppUser.EDU.class, AppUser.EDU.STUDENT);
-            else
-                inject = new InjectableValues.Std().addValue(AppUser.EDU.class, AppUser.EDU.FACULTY);
-            System.out.println(queryDoc.toJson());
-            AppUser queriedUser = mapper.reader(inject).forType(AppUser.class).readValue(queryDoc.toJson());
+
+            AppUser queriedUser = mapper.readValue(queryDoc.toJson(), AppUser.class);
             return queriedUser;
             //return new AppUser(session.getEducation(), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
                     //queryDoc.get("username").toString(), queryDoc.get("password").toString()); //TODO delete if Jackson works
@@ -168,7 +162,7 @@ public class UserRepository implements CrudRepository<AppUser>{
                 throw new RuntimeException(newUser.getId()+" already exists in "+userCollection.toString());
             }
             //Create user document and save to database.
-            Document newUserDoc = AppUser.toDocument(newUser);
+            Document newUserDoc = newUser.toDocument();
             userCollection.insertOne(newUserDoc);
             newUser.setId(newUserDoc.get("_id").toString());
             logger.info("username "+newUser.getUsername()+" persisted to "+userCollection.getNamespace()+" with id "+newUser.getId());
@@ -190,7 +184,7 @@ public class UserRepository implements CrudRepository<AppUser>{
                 throw new DocumentNotFoundException();
             userCollection.deleteOne(queryDoc);
             //Create a new user document with updated fields.
-            Document newUserDoc = AppUser.toDocument(updatedUser);
+            Document newUserDoc = updatedUser.toDocument();
             userCollection.insertOne(newUserDoc);
             updatedUser.setId(newUserDoc.get("_id").toString());
 

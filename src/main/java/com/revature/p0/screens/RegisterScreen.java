@@ -20,7 +20,7 @@ public class RegisterScreen extends Screen {
     private BufferedReader reader;
     private final UserService service;
     private UserSession session;
-
+    QuestionFactory qFactory = QuestionFactory.getInstance();
 
     public RegisterScreen(BufferedReader reader, ScreenRouter router, UserService service, UserSession session){
         super("Register Screen", "/register",reader,router);
@@ -55,16 +55,16 @@ public class RegisterScreen extends Screen {
             edu = reader.readLine();
         }
 
-        QuestionFactory qFactory = new QuestionFactory(service);
+
         String[] questionTypeArray = {"firstname", "lastname", "email", "username", "password"};
         String[] answerArray = new String[questionTypeArray.length];
 
         for (int i = 0; i < questionTypeArray.length; i++) {
-            Question question = qFactory.getQuestion(questionTypeArray[i]);
+            Question question = qFactory.getQuestion(questionTypeArray[i],service);
             String answer = reader.readLine();
             while (!question.validAnswer(answer)) {answer = reader.readLine();}
             answerArray[i] = answer;
-            logger.info(questionTypeArray[i]+" set to "+answer);
+
         }
 
             AppUser newUser = service.createAppUser(answerArray);
