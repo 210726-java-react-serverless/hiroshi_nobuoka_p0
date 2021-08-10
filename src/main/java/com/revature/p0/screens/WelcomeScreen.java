@@ -26,8 +26,7 @@ public class WelcomeScreen extends Screen{
                 "\nPlease select from the following:\n"+
                 "1) Login\n" +
                 "2) Register\n"+
-                "3) Exit\n"+
-                ">";
+                "3) Exit\n";
         System.out.print(menu);
 
         NavigateScreenQuestion askUserInput = new NavigateScreenQuestion(3);

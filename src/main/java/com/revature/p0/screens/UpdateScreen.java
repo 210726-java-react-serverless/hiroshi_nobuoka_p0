@@ -9,14 +9,15 @@ import com.revature.p0.util.UserSession;
 
 import java.io.BufferedReader;
 
-public class UpdateScreen {
+public class UpdateScreen extends Screen{
     private UserService service;
     private ScreenRouter router;
     private UserSession session;
     private BufferedReader reader;
     QuestionFactory qFactory = QuestionFactory.getInstance();
 
-    public UpdateScreen(UserService service, ScreenRouter router, UserSession session, BufferedReader reader){
+    public UpdateScreen(BufferedReader reader, ScreenRouter router, UserSession session, UserService service){
+        super("Update Screen", "/update", reader, router);
         this.service = service;
         this.router = router;
         this.session = session;
