@@ -92,7 +92,8 @@ public class UserRepository implements CrudRepository<AppUser>{
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
             ObjectMapper mapper = new ObjectMapper();
-            Document queryDoc = userCollection.find(new BasicDBObject("email", email)).first();
+            BasicDBObject name = new BasicDBObject("email", email);
+            Document queryDoc = userCollection.find(name).first();
 
             AppUser queriedUser = mapper.readValue(queryDoc.toJson(), AppUser.class);
             return queriedUser;
@@ -133,23 +134,21 @@ public class UserRepository implements CrudRepository<AppUser>{
         try {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
-            ObjectMapper mapper = new ObjectMapper();
-            AppUser queriedUser;
+            //ObjectMapper mapper = new ObjectMapper();
             Document queryDoc = userCollection.find(new BasicDBObject("_id", id)).first();//TODO key may be incorrect, make sure to test
-
-            return queriedUser = mapper.readValue(queryDoc.toJson(), AppUser.class);
-            //return new AppUser(session.getEducation(), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
-                    //queryDoc.get("username").toString(), queryDoc.get("password").toString());
+            AppUser queriedUser= new AppUser(AppUser.EDU.fromString(queryDoc.get("edu").toString()), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
+                    queryDoc.get("username").toString(), queryDoc.get("password").toString());
+            return queriedUser;
         } catch (NullPointerException npe) {
             npe.printStackTrace();
             throw new DataSourceException("Database or collection not found", npe);
-        } catch (JsonMappingException jme){
+        } /*catch (JsonMappingException jme){
             jme.printStackTrace();
             throw new DataSourceException("Json mapping exception", jme);
         } catch (JsonProcessingException jpe){
             jpe.printStackTrace();;
             throw new DataSourceException("Json processing exception", jpe);
-        }
+        }*/
     }
 
     @Override

@@ -6,10 +6,13 @@ import com.revature.p0.services.UserService;
 import com.revature.p0.util.QuestionFactory;
 import com.revature.p0.util.ScreenRouter;
 import com.revature.p0.util.UserSession;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 
 public class LoginScreen extends Screen {
+    private final Logger logger = LogManager.getLogger(LoginScreen.class);
     private final UserService service;
     private BufferedReader reader;
     private ScreenRouter router;
@@ -21,6 +24,7 @@ public class LoginScreen extends Screen {
         this.service = service;
         this.reader= reader;
         this.session = session;
+        this.router= router;
     }
 
     @Override
