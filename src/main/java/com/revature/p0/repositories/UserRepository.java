@@ -17,6 +17,7 @@ import com.revature.p0.util.MongoClientFactory;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.bson.types.ObjectId;
 
 public class UserRepository implements CrudRepository<AppUser>{
     static final Logger logger = LogManager.getLogger(UserRepository.class);
@@ -42,9 +43,10 @@ public class UserRepository implements CrudRepository<AppUser>{
             if(authStudentDoc == null){
                 return null;
             }
-
-            return new AppUser(session.getEducation(), authStudentDoc.get("firstName").toString(), authStudentDoc.get("lastName").toString(), authStudentDoc.get("email").toString(),
+            AppUser user = new AppUser(session.getEducation(), authStudentDoc.get("firstName").toString(), authStudentDoc.get("lastName").toString(), authStudentDoc.get("email").toString(),
                     authStudentDoc.get("username").toString(), authStudentDoc.get("password").toString());
+            user.setId(authStudentDoc.get("_id").toString());
+            return user;
 
         } catch (NullPointerException npe){
             npe.printStackTrace(); //TODO log this
@@ -134,8 +136,11 @@ public class UserRepository implements CrudRepository<AppUser>{
             //Create user document and save to database.
             Document newUserDoc = newUser.toDocument();
             userCollection.insertOne(newUserDoc);
-            newUser.setId(newUserDoc.get("_id").toString());
-            logger.info("username "+newUser.getUsername()+" persisted to "+userCollection.getNamespace()+" with id "+newUser.getId());
+
+            //Query the doc we just saved and obtain the user ID
+            Document getIDDoc = userCollection.find(new BasicDBObject("username", newUser.getUsername())).first();
+            newUser.setId(getIDDoc.get("_id").toString());
+            logger.info("username "+newUser.getUsername()+" saved to "+userCollection.getNamespace()+" with id "+newUser.getId());
 
 
         } catch (Exception e) {
@@ -147,18 +152,20 @@ public class UserRepository implements CrudRepository<AppUser>{
     @Override
     public void update(AppUser updatedUser) {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
-
+            ObjectId id = new ObjectId(updatedUser.getId());
             //Delete the user document made prior to update.
-            Document queryDoc = userCollection.find(new BasicDBObject("_id", updatedUser.getId())).first();//TODO log content of this doc
-            if(queryDoc == null)
+            Document queryDoc = userCollection.find(new BasicDBObject("_id", id)).first();
+
+            if(queryDoc == null) {
+
                 throw new DocumentNotFoundException();
+            }
             userCollection.deleteOne(queryDoc);
             //Create a new user document with updated fields.
             Document newUserDoc = updatedUser.toDocument();
+            logger.debug(newUserDoc.toJson());
             userCollection.insertOne(newUserDoc);
             updatedUser.setId(newUserDoc.get("_id").toString());
-
-
     }
 
     @Override

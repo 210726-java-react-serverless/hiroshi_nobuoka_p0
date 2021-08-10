@@ -21,7 +21,7 @@ public class AppUser {
     private String email;
     private String username;
     private String password;
-    private HashMap<String, String> properties = new HashMap<>();
+
 
     public AppUser(){}
 
@@ -39,12 +39,6 @@ public class AppUser {
         this.email = email;
         this.username = username;
         this.password = password;
-        properties.put("firstname", firstName);
-        properties.put("lastname", lastName);
-        properties.put("email", email);
-        properties.put("username", username);
-        properties.put("password", password);
-        properties.put("edu", this.edu);
     }
 
     public Document toDocument(){
@@ -58,7 +52,7 @@ public class AppUser {
         return newUserDoc;
     }
 
-    public HashMap<String, String> getProperties() {return properties;}
+
 
     public String getId() {return id;}
 
