@@ -168,10 +168,10 @@ public class UserRepository implements CrudRepository<AppUser>{
     }
 
     @Override
-    public void deleteById(int id) {
+    public void delete(String username) {
         MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
-        userCollection.deleteOne(Filters.eq("_id", id));
+        userCollection.deleteOne(Filters.eq("uesrname", username));
         System.out.println("Document deleted successfully.");
     }
 

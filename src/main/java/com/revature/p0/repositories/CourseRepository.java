@@ -4,7 +4,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.revature.p0.documents.AppUser;
+import com.mongodb.client.model.Filters;
+
 import com.revature.p0.documents.Course;
 import com.revature.p0.exceptions.DataSourceException;
 import com.revature.p0.util.MongoClientFactory;
@@ -43,10 +44,6 @@ public class CourseRepository implements CrudRepository<Course>{
         }
     }
 
-    @Override
-    public Course findById(String id) {
-        return null;
-    }
 
     @Override
     public void save(Course newCourse) {
@@ -71,15 +68,29 @@ public class CourseRepository implements CrudRepository<Course>{
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
-
+    @Override
+    public void delete(String courseTag) {
+        try {
+            MongoCollection<Document> userCollection = projectDb.getCollection("courses");
+            Course queryCourse = this.findCourseByTag(courseTag);
+            logger.info("Queried course name is " + queryCourse.toString());
+            if (queryCourse.getInstructor().equals(session.getCurrentUser().toString())) {
+                userCollection.deleteOne(Filters.eq("coursetag", courseTag));
+                System.out.println("Course " + courseTag + "removed, successfully.");
+            } else
+                System.out.println("Course is registered under "+session.getCurrentUser().toString()+". Permission to remove course, denied.");
+        }catch(NullPointerException npe){
+            System.out.println("Course tag not found");
+        }
+    }
 
     @Override
     public void update(Course updatedCourse) {
 
     }
-
     @Override
-    public void deleteById(int id) {
-
+    public Course findById(String id) {
+        return null;
     }
+
 }

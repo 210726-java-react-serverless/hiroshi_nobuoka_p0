@@ -31,7 +31,7 @@ public class LoginScreen extends Screen {
     @Override
     public void render() throws Exception {
 
-        String menu = "\nUser Login\n" +
+        String menu = "User Login\n" +
                 "1) Login\n" +
                 "2) Go Back\n" +
                 ">";
@@ -68,9 +68,10 @@ public class LoginScreen extends Screen {
         } else {
             System.out.println("Login successful!");
             if (user.getEdu().equals("STUDENT")) {
-                logger.info("user is a student");
                 router.navigate("/sdash");
-            } else {router.navigate("/welcome");}
+            }else if(user.getEdu().equals("FACULTY")) {
+                router.navigate("/fdash");
+            }else {router.navigate("/welcome");}
         }
 
     }

@@ -31,11 +31,15 @@ public class CourseService {
             throw new IllegalArgumentException("Argument for register() method must be 'new' or 'update'");
     }
 
+    public void removeCourse(String courseTag){
+        repo.delete(courseTag);
+    }
+
     public boolean courseTagAvailable(String tag){
         if(repo.findCourseByTag(tag) == null)
             return true;
         return false;
     }
 
-    
+
 }

@@ -1,8 +1,12 @@
 package com.revature.p0.screens;
 
+import com.revature.p0.documents.AppUser;
+import com.revature.p0.documents.Course;
 import com.revature.p0.questions.NavigateScreenQuestion;
 import com.revature.p0.questions.Question;
+import com.revature.p0.services.CourseService;
 import com.revature.p0.services.UserService;
+import com.revature.p0.util.QuestionFactory;
 import com.revature.p0.util.ScreenRouter;
 import com.revature.p0.util.UserSession;
 import org.apache.logging.log4j.LogManager;
@@ -12,10 +16,11 @@ import java.io.BufferedReader;
 
 public class FacultyRegistrationScreen extends Screen{
     static final Logger logger = LogManager.getLogger(RegisterScreen.class);
-    private final UserService service;
+    private final CourseService service;
     private UserSession session;
+    QuestionFactory qFactory = QuestionFactory.getInstance();
 
-    public FacultyRegistrationScreen(BufferedReader reader, ScreenRouter router, UserService service, UserSession session){
+    public FacultyRegistrationScreen(BufferedReader reader, ScreenRouter router, CourseService service, UserSession session){
         super("Faculty Registration Screen", "/freg",reader,router);
         this.service = service;
         this.session = session;
@@ -27,7 +32,8 @@ public class FacultyRegistrationScreen extends Screen{
         String menu = "You're on the course management screen.\n" +
                 "1)Create a course\n" +
                 "2)Remove a course\n" +
-                "3)Back\n";
+                "3)Update a course\n" +
+                "4)Back\n";
 
         System.out.println(courseList);
         System.out.println(menu);
@@ -40,10 +46,30 @@ public class FacultyRegistrationScreen extends Screen{
 
         switch (userInput) {
             case "1":
+                String[] questionTypeArray = {"coursetag", "coursename"};
+                String[] answerArray = new String[questionTypeArray.length];
+
+                //ask each question questionArray, and store each answer in answerArray
+                for (int i = 0; i < questionTypeArray.length; i++) {
+                    Question question = qFactory.getCourseQuestion(questionTypeArray[i],service);
+                    String answer = reader.readLine();
+                    while (!question.validAnswer(answer)) {answer = reader.readLine();}
+                    answerArray[i] = answer;
+                }
+                Course newCourse = service.createCourse(answerArray);
+                logger.info("new course "+ newCourse.getCourseName()+" instantiation complete");
+
+                service.registerCourse(newCourse, "new");
+                System.out.println("Registration successful!");
                 break;
             case "2":
+                qFactory.getCourseQuestion("coursetag",service);
+                String tag = reader.readLine();
+                service.removeCourse(tag);
                 break;
             case "3:":
+                break;
+            case "4:":
                 router.previousScreen();
         }
     }

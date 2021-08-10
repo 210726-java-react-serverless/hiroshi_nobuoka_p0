@@ -1,9 +1,11 @@
 package com.revature.p0.util;
 
 
+import com.revature.p0.repositories.CourseRepository;
 import com.revature.p0.repositories.UserRepository;
 import com.revature.p0.screens.*;
 
+import com.revature.p0.services.CourseService;
 import com.revature.p0.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +27,8 @@ public class AppState {
         UserSession session = new UserSession();
         UserRepository repo = new UserRepository(session);
         UserService service = new UserService(repo, session);
+        CourseRepository courseRepo = new CourseRepository(session);
+        CourseService courseService = new CourseService(courseRepo, session);
 
         router.addScreen(new WelcomeScreen(reader, router));
         router.addScreen(new LoginScreen(reader, router, service, session));
@@ -33,6 +37,7 @@ public class AppState {
         router.addScreen(new FacultyDashboard(reader, router));
         router.addScreen(new UpdateScreen(reader,router, service, session));
         router.addScreen(new StudentRegistrationScreen(reader,router, service,session));
+        router.addScreen(new FacultyRegistrationScreen(reader,router,courseService,session));
     }
 
     public void startup() {

@@ -3,6 +3,8 @@ package com.revature.p0.documents;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.Document;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Course {
@@ -10,18 +12,19 @@ public class Course {
     private String courseTag;
     private String courseName;
     private String instructor;
-    private int enrolled;
+    private List<String> enrolled = new ArrayList<>();
 
     public Course(String courseTag, String courseName, String instructor) {
         this.courseTag = courseTag;
         this.courseName = courseName;
         this.instructor = instructor;
     }
-    public Document toDocument(){
 
+    public Document toDocument(){
         Document newUserDoc = new Document("coursetag", this.getCourseTag())
                 .append("coursename", this.getCourseName())
-                .append("instructor", this.getInstructor());
+                .append("instructor", this.getInstructor())
+                .append("enrolled", this.getEnrolled());
         return newUserDoc;
     }
 
@@ -57,11 +60,10 @@ public class Course {
         this.instructor = instructor;
     }
 
-    public int getEnrolled() {
+    public List<String> getEnrolled() {
         return enrolled;
     }
-
-    public void setEnrolled(int enrolled) {
+    public void setEnrolled(List<String> enrolled) {
         this.enrolled = enrolled;
     }
 
