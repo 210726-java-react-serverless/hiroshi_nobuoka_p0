@@ -22,12 +22,13 @@ public class Course {
         this.instructorId = instructor.getId();
     }
 
-    public Course(String courseId, String courseTag, String courseName, AppUser instructor) {
+    public Course(String courseId, String courseTag, String courseName, AppUser instructor,  List<String> enrolled) {
         this.courseId = courseId;
         this.courseTag = courseTag;
         this.courseName = courseName;
         this.instructor = instructor.getFirstName()+" "+instructor.getLastName();
         this.instructorId = instructor.getId();
+        this.enrolled = enrolled;
     }
     public Document toDocument(){
         Document newUserDoc = new Document("coursetag", this.getCourseTag())

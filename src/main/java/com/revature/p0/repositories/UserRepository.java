@@ -22,14 +22,10 @@ import org.bson.types.ObjectId;
 public class UserRepository implements CrudRepository<AppUser>{
     static final Logger logger = LogManager.getLogger(UserRepository.class);
     private UserSession session;
-    MongoClient mongoClient;
-    MongoDatabase projectDb;
+    private MongoClient mongoClient= MongoClientFactory.getInstance().getConnection();
+    private MongoDatabase projectDb= mongoClient.getDatabase("ProjectZero");
 
     public UserRepository(UserSession session){
-        MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-        MongoDatabase projectDb = mongoClient.getDatabase("ProjectZero");
-        this.mongoClient = mongoClient;
-        this.projectDb = projectDb;
         this.session = session;
     }
 
@@ -135,6 +131,7 @@ public class UserRepository implements CrudRepository<AppUser>{
                     queryDoc.get("username").toString(),
                     queryDoc.get("password").toString());
             return queriedUser;
+
     }
 
     @Override

@@ -33,11 +33,12 @@ public class AppState {
         router.addScreen(new WelcomeScreen(reader, router));
         router.addScreen(new LoginScreen(reader, router, service, session));
         router.addScreen(new RegisterScreen(reader,router,service, session));
-        router.addScreen(new StudentDashboard(reader,router));
+        router.addScreen(new StudentDashboard(reader,router, courseService, session));
         router.addScreen(new FacultyDashboard(reader, router));
         router.addScreen(new UpdateScreen(reader,router, service, session));
         router.addScreen(new StudentRegistrationScreen(reader,router, courseService,session));
         router.addScreen(new FacultyRegistrationScreen(reader,router,courseService,session));
+        router.addScreen(new CourseCatalogScreen(reader,router,courseService,session));
     }
 
     public void startup() {

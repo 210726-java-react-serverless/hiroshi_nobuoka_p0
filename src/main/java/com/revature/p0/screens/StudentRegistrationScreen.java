@@ -27,7 +27,7 @@ public class StudentRegistrationScreen extends Screen{
     public void render() throws Exception {
         String courseListing= "Put student course info here\n";
         String menu = "You're on the course registration screen.\n" +
-                "1)Register for a course\n" +
+                "1)View  a course\n" +
                 "2)Drop a course\n" +
                 "3)Back\n";
 

@@ -24,20 +24,13 @@ import java.util.List;
 public class CourseRepository implements CrudRepository<Course>{
     static final Logger logger = LogManager.getLogger(UserRepository.class);
     private UserSession session;
-    MongoClient mongoClient;
-    MongoDatabase projectDb;
+    MongoClient mongoClient= MongoClientFactory.getInstance().getConnection();
+    MongoDatabase projectDb = mongoClient.getDatabase("ProjectZero");
+    MongoCollection<Document> userCollection = projectDb.getCollection("courses");
 
-    public CourseRepository(UserSession session){
-        MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-        MongoDatabase projectDb = mongoClient.getDatabase("ProjectZero");
-        this.mongoClient = mongoClient;
-        this.projectDb = projectDb;
-        this.session = session;
-    }
+    public CourseRepository(UserSession session){this.session = session;}
 
     public Course findCourseByTag(String tag) throws NullPointerException{
-
-            MongoCollection<Document> userCollection = projectDb.getCollection("courses");
 
             Document queryDoc = userCollection.find( new BasicDBObject("coursetag", tag)).first();
             AppUser instructor = UserRepository.findInstructorById(queryDoc.get("instructorId").toString());
@@ -45,15 +38,14 @@ public class CourseRepository implements CrudRepository<Course>{
             Course queriedCourse= new Course(queryDoc.get("_id").toString(),
                     queryDoc.get("coursetag").toString(),
                     queryDoc.get("coursename").toString(),
-                    instructor);
+                    instructor, queryDoc.getList("enrolled", String.class));
+            logger.info("Course found by findCourseByTag: "+queriedCourse);
             return queriedCourse;
     }
-
 
     @Override
     public void save(Course newCourse) {
         try {
-            MongoCollection<Document> userCollection = projectDb.getCollection("courses");
             //Check to make sure course tag does not already exist in database.
             Document queryDoc = userCollection.find(new BasicDBObject("_id", newCourse.getCourseId())).first();
             if(queryDoc != null) {
@@ -76,7 +68,6 @@ public class CourseRepository implements CrudRepository<Course>{
     @Override
     public void delete(String courseTag) {
         try {
-            MongoCollection<Document> userCollection = projectDb.getCollection("courses");
             Course queryCourse = findCourseByTag(courseTag);
             logger.info("Found course "+queryCourse.getCourseTag()+" for delete() call");
 
@@ -92,24 +83,26 @@ public class CourseRepository implements CrudRepository<Course>{
         }
     }
 
-    public FindIterable<Document> getAllCourses() throws NullPointerException{
-            MongoCollection<Document> userCollection = projectDb.getCollection("courses");
-            return userCollection.find();
+    public FindIterable<Document> getAllCourses() {
+        //try block is two lines to enable catch block to work.
+        try {
+            FindIterable<Document> courses = userCollection.find();
+            return courses;
+        }catch (NullPointerException npe){
+            logger.debug(".GETALLCOURSES() returned null.");
+            return null;
+        }
     }
     @Override
     public void update(Course updatedCourse) {
-        MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-        MongoDatabase projectDb = mongoClient.getDatabase("ProjectZero");
-        MongoCollection<Document> userCollection = projectDb.getCollection("courses");
-
         ObjectId id = new ObjectId(updatedCourse.getCourseId());
         //Delete the user document made prior to update.
         Document queryDoc = userCollection.find(new BasicDBObject("_id", id)).first();
 
         if(queryDoc == null) {
+            logger.debug("Course document "+ updatedCourse.getCourseTag()+ " not found for updating.");
+            throw new DocumentNotFoundException();}
 
-            throw new DocumentNotFoundException();
-        }
         userCollection.deleteOne(queryDoc);
         //Create a new user document with updated fields.
         Document newCourseDoc = updatedCourse.toDocument();
@@ -117,6 +110,36 @@ public class CourseRepository implements CrudRepository<Course>{
         updatedCourse.setCourseId(newCourseDoc.get("_id").toString());
     }
 
+    public void registerStudentForCourse(String tag, UserSession session)throws NullPointerException{
+        //Find course and add student to list of enrolled students
+        Course course = this.findCourseByTag(tag);
+        String username = session.getCurrentUser().getUsername();
+        if(!course.getEnrolled().contains(username)) {
+            course.getEnrolled().add(username);
+            System.out.println("Registration successful! You are now registered to "+course.getCourseTag()+".\n");
+
+        } else {
+            System.out.println("You're already registered for the course!\n");
+            return;
+        }
+        this.update(course);
+    }
+
+    public void dropStudentFromCourse(String tag, UserSession session){
+        //Find course and remove student from list of enrolled students
+        Course course = this.findCourseByTag(tag);
+        String username = session.getCurrentUser().getUsername();
+        if(course.getEnrolled().contains(username)) {
+            logger.info("Student " + username + " dropped from course " + course.getCourseTag());
+            course.getEnrolled().remove(username);
+            System.out.println("Course drop successful!");
+        }else {
+            System.out.println("Failed to drop course. You must be registered for a course in order to drop it.");
+            return;
+        }
+
+        this.update(course);
+    }
 
 
 }

@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 import org.mockito.internal.matchers.Null;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,48 +48,60 @@ public class CourseService {
     }
 
 
-    public List<Course> getCourses(AppUser user) throws NullPointerException{
+    public List<Course> getCourses(AppUser user) throws NullPointerException {
         FindIterable<Document> docs = repo.getAllCourses();
-        if(user.getEdu().equals("STUDENT")) {
+        if (user.getEdu().equals("STUDENT")) {
             List<Course> courses = new ArrayList<>();
             for (Document doc : docs) {
                 AppUser instructor = UserRepository.findInstructorById(doc.get("instructorId").toString());
                 List<String> enrolled = doc.getList("enrolled", String.class);
-                if (enrolled.contains(user.getId())) {
+                logger.info("GETCOURSES(): "+doc.get("coursetag")+ " have enrollees " +enrolled);
+                if (enrolled.contains(user.getUsername())) {
                     Course course = new Course(doc.get("_id").toString(),
                             doc.get("coursetag").toString(),
                             doc.get("coursename").toString(),
-                            instructor);
+                            instructor, enrolled);
                     courses.add(course);
                 }
-            }
-            return courses;
-        } else if (user.getEdu().equals("FACULTY"))    {
+            } return courses;
+        } else if (user.getEdu().equals("FACULTY")) {
             List<Course> courses = new ArrayList<>();
-            for(Document doc : docs) {
+            for (Document doc : docs) {
                 if (doc.get("instructorId").equals(user.getId())) {
                     Course course = new Course(doc.get("_id").toString(),
                             doc.get("coursetag").toString(),
                             doc.get("coursename").toString(),
-                            user);
+                            user, doc.getList("enrolled", String.class));
                     courses.add(course);
                 }
             } return courses;
         } else {
-            logger.debug("getCourses() method did not have user's edu, could not filter courses.");
+            logger.debug("user's education returns " + user.getEdu() + "for getCourses() method");
+            return null;
+        }
+    }
+    //Overloaded course
+    public List<Course> getCourses(AppUser user, String all) throws NullPointerException {
+            FindIterable<Document> docs = repo.getAllCourses(); //TODO sort
             List<Course> courses = new ArrayList<>();
             for(Document doc: docs){
                 AppUser instructor = UserRepository.findInstructorById(doc.get("instructorId").toString());
                 Course course = new Course(doc.get("_id").toString(),
                         doc.get("coursetag").toString(),
                         doc.get("coursename").toString(),
-                        instructor);
+                        instructor, doc.getList("enrolled", String.class));
                 courses.add(course);
             } return courses;
         }
+
+    public void registerStudent(String tag, UserSession session){
+        try {
+            repo.registerStudentForCourse(tag, session);
+        }catch(NullPointerException npe){
+            logger.debug(".CourseService.registerStudent: Course document not found in database. Verification of its existence should have completed prior to method call.");
+            System.out.println("Course registration failed. Sorry for the inconvenience.");
+        }
     }
-
-
 
     public boolean courseTagAvailable(String tag){
         try {
@@ -105,6 +118,15 @@ public class CourseService {
         } catch (NullPointerException npe){
             System.out.println("Course tag not found. Please try again.");
             return null;
+        }
+    }
+
+    public void dropCourse(String tag, UserSession session){
+        try {
+            repo.dropStudentFromCourse(tag, session);
+        }catch(NullPointerException npe){
+            logger.debug(".CourseService.registerStudent: Course document not found in database. Verification of its existence should have completed prior to method call.");
+            System.out.println("Course drop failed. Sorry for the inconvenience.");
         }
     }
 

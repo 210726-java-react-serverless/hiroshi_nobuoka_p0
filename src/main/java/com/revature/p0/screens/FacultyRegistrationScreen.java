@@ -35,7 +35,7 @@ public class FacultyRegistrationScreen extends Screen {
         System.out.println("Below are a list of the courses you teach:");
         for (Course course : courses)
             System.out.println(course.getCourseTag());
-        String menu = "You're on the course management screen.\n" +
+        String menu = "You're on the faculty course management screen.\n" +
                 "1)Create a course\n" +
                 "2)Remove a course\n" +
                 "3)Update course info\n" +
