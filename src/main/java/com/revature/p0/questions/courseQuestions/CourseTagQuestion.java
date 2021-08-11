@@ -5,7 +5,7 @@ import com.revature.p0.services.CourseService;
 
 public class CourseTagQuestion extends Question {
     private static final String type = "coursetag";
-    private String question = "Enter the tag for the course. \nShould be a 7 character tag with a three capital letter prefix and a four digit course number (e.g. CIS3005): ";
+    private String question = "Enter the tag for the course: ";
     private CourseService service;
 
     public CourseTagQuestion(CourseService service){
@@ -16,7 +16,7 @@ public class CourseTagQuestion extends Question {
     @Override
     public boolean validAnswer(String answer) {
         if(!answer.matches("[A-Z]{3}[0-9]{4}")) {
-            System.out.println("Tag must start with three capital letters and end with four numbers. Try again: ");
+            System.out.println("Tag must start with three capital letters and end with four numbers (e.g. CIS2000). Try again: ");
             return false;
         }
         if(!service.courseTagAvailable(answer)){
