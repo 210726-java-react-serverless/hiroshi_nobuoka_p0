@@ -12,7 +12,6 @@ import com.revature.p0.util.UserSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bson.Document;
-import org.mockito.internal.matchers.Null;
 
 
 import java.util.ArrayList;

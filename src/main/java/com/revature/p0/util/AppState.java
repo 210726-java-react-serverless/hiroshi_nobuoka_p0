@@ -1,6 +1,7 @@
 package com.revature.p0.util;
 
 
+import com.revature.p0.documents.Course;
 import com.revature.p0.repositories.CourseRepository;
 import com.revature.p0.repositories.UserRepository;
 import com.revature.p0.screens.*;
@@ -26,17 +27,18 @@ public class AppState {
 
         UserSession session = new UserSession();
         UserRepository repo = new UserRepository(session);
-        UserService service = new UserService(repo, session);
         CourseRepository courseRepo = new CourseRepository(session);
         CourseService courseService = new CourseService(courseRepo, session);
+        UserService service = new UserService(repo, session);
+        UserService serviceLink = new UserService(repo, session, courseService);
+
 
         router.addScreen(new WelcomeScreen(reader, router));
         router.addScreen(new LoginScreen(reader, router, service, session));
         router.addScreen(new RegisterScreen(reader,router,service, session));
         router.addScreen(new StudentDashboard(reader,router, courseService, session));
         router.addScreen(new FacultyDashboard(reader, router));
-        router.addScreen(new UpdateScreen(reader,router, service, session));
-        router.addScreen(new StudentRegistrationScreen(reader,router, courseService,session));
+        router.addScreen(new UpdateScreen(reader,router, serviceLink, session));
         router.addScreen(new FacultyRegistrationScreen(reader,router,courseService,session));
         router.addScreen(new CourseCatalogScreen(reader,router,courseService,session));
     }

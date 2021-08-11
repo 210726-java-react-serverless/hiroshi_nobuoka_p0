@@ -61,12 +61,11 @@ public class CourseCatalogScreen extends Screen{
                 service.registerStudent(registerFor, session);
                 break;
             case "2":
-                System.out.println("Below is a list of courses you've registered for: ");
+                System.out.println("Below is a list of courses you can drop:");
                 List<Course> myCourses = service.getCourses(session.getCurrentUser());
                 for (Course course : myCourses)
                     System.out.println(course.getCourseTag() + "\t" + course.getCourseName() + "\t" + course.getInstructor());
-
-                System.out.println("Please enter the tag of the course you would like to drop: ");
+                System.out.println("");
                 CourseTagQuestion questionTwo = (CourseTagQuestion) qFactory.getCourseQuestion("coursetag", service);
                 String dropCourse = reader.readLine();
                 if (!questionTwo.validAnswer(dropCourse, "drop")) {

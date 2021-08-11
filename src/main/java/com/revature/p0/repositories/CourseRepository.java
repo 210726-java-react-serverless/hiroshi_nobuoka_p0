@@ -98,7 +98,7 @@ public class CourseRepository implements CrudRepository<Course>{
         ObjectId id = new ObjectId(updatedCourse.getCourseId());
         //Delete the user document made prior to update.
         Document queryDoc = userCollection.find(new BasicDBObject("_id", id)).first();
-
+        logger.info("UPDATE queryDoc contains " +queryDoc);
         if(queryDoc == null) {
             logger.debug("Course document "+ updatedCourse.getCourseTag()+ " not found for updating.");
             throw new DocumentNotFoundException();}
@@ -118,11 +118,11 @@ public class CourseRepository implements CrudRepository<Course>{
             course.getEnrolled().add(username);
             System.out.println("Registration successful! You are now registered to "+course.getCourseTag()+".\n");
 
+            this.update(course);
         } else {
             System.out.println("You're already registered for the course!\n");
             return;
         }
-        this.update(course);
     }
 
     public void dropStudentFromCourse(String tag, UserSession session){

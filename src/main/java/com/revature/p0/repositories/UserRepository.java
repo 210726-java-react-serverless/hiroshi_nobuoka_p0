@@ -162,12 +162,12 @@ public class UserRepository implements CrudRepository<AppUser>{
     @Override
     public void update(AppUser updatedUser) {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
+            logger.info(updatedUser.getId());
             ObjectId id = new ObjectId(updatedUser.getId());
             //Delete the user document made prior to update.
             Document queryDoc = userCollection.find(new BasicDBObject("_id", id)).first();
 
             if(queryDoc == null) {
-
                 throw new DocumentNotFoundException();
             }
             userCollection.deleteOne(queryDoc);

@@ -67,7 +67,7 @@ public class RegisterScreen extends Screen {
             AppUser newUser = service.createAppUser(answerArray);
             logger.info("new user "+ newUser.getUsername()+" instantiation complete");
 
-            service.register(newUser, "new");
+            service.register(newUser);
             System.out.println("Registration successful!");
 
             //navigate to appropriate dashboard

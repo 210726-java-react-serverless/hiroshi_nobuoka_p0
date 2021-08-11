@@ -3,6 +3,7 @@ package com.revature.p0.screens;
 import com.revature.p0.documents.AppUser;
 import com.revature.p0.questions.NavigateScreenQuestion;
 import com.revature.p0.questions.Question;
+import com.revature.p0.services.CourseService;
 import com.revature.p0.services.UserService;
 import com.revature.p0.util.QuestionFactory;
 import com.revature.p0.util.ScreenRouter;
@@ -15,28 +16,31 @@ import java.util.HashMap;
 
 public class UpdateScreen extends Screen{
     private final Logger logger = LogManager.getLogger(UpdateScreen.class);
-    private UserService service;
+    private UserService serviceLink;
     private ScreenRouter router;
     private UserSession session;
     private BufferedReader reader;
+    private CourseService courseService;
     QuestionFactory qFactory = QuestionFactory.getInstance();
 
-    public UpdateScreen(BufferedReader reader, ScreenRouter router, UserService service, UserSession session){
+    public UpdateScreen(BufferedReader reader, ScreenRouter router, UserService serviceLink, UserSession session){
         super("Update Screen", "/update", reader, router);
-        this.service = service;
+        this.serviceLink = serviceLink;
         this.router = router;
         this.session = session;
         this.reader = reader;
+        this.courseService = courseService;
     }
 
     public void render() throws Exception{
-        AppUser user = session.getCurrentUser();
-        String currentInfo = "First name: "+user.getFirstName()+"\t"
-                +"Last name: "+user.getLastName()+"\n"
-                +"ID: "+user.getId()+"\t"
-                +"Email: "+user.getEmail()+"\n"
-                +"Username: "+user.getUsername()+"\t"
-                +"Password: "+user.getPassword()+"\n"; //TODO Find way to encrypt
+        AppUser beforeUpdate = session.getCurrentUser();
+
+        String currentInfo = "First name: "+beforeUpdate.getFirstName()+"\t"
+                +"Last name: "+beforeUpdate.getLastName()+"\n"
+                +"ID: "+beforeUpdate.getId()+"\t"
+                +"Email: "+beforeUpdate.getEmail()+"\n"
+                +"Username: "+beforeUpdate.getUsername()+"\t"
+                +"Password: "+beforeUpdate.getPassword()+"\n"; //TODO Find way to encrypt
         System.out.println(currentInfo);
 
         String menu = "Please select the item you wish to update: \n"+
@@ -53,7 +57,9 @@ public class UpdateScreen extends Screen{
         if(userInput.equals("6"))
             router.previousScreen();
         else {
-            Question question = qFactory.getQuestion(questionTypeArray[Integer.parseInt(userInput)-1], service);
+            AppUser user = new AppUser(session.getEducation(), beforeUpdate.getId(), beforeUpdate.getFirstName(), beforeUpdate.getLastName(), beforeUpdate.getEmail(), beforeUpdate.getUsername(), beforeUpdate.getPassword());
+            Question question = qFactory.getQuestion(questionTypeArray[Integer.parseInt(userInput)-1], serviceLink);
+
             String answer = reader.readLine();
             while (!question.validAnswer(answer))
                 answer = reader.readLine();
@@ -72,8 +78,7 @@ public class UpdateScreen extends Screen{
                 case "5":
                     user.setUsername(answer);
             }
-
-            service.register(user, "update");
+            serviceLink.update(beforeUpdate, user);
             System.out.println("Your information has been updated!\n");
         }
     }
