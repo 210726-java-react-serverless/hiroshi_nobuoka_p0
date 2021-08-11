@@ -111,7 +111,7 @@ public class FacultyRegistrationScreen extends Screen {
 
             String[] questionTypeArray = {"coursename", "coursetag"};
             if (userInput.equals("4"))
-                router.navigate("/login");
+                router.previousScreen();
             else {
                 Question question = qFactory.getCourseQuestion(questionTypeArray[Integer.parseInt(userInput) - 1], service);
                 String answer = reader.readLine();

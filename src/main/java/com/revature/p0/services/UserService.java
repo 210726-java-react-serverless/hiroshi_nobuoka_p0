@@ -61,7 +61,7 @@ public class UserService {
                     }
                 }catch(NullPointerException npe){
                     logger.info("UPDATE(): Student update doesn't require course edit. Student not registered for courses.");
-                }
+                } finally {session.setCurrentUser(user);}
             } else if(user.getEdu().equals("FACULTY")){
                 try {
                     List<Course> courses = courseService.getCourses(beforeUpdate);
