@@ -21,7 +21,7 @@ public class UserService {
         this.repo = repo;
         this.session = session;
     }
-
+    //Overloaded constructor to enable referential integrity, i.e. a way to inject the service class for courses
     public UserService(UserRepository repo, UserSession session, CourseService courseService) {
         this.repo = repo;
         this.session = session;
@@ -43,12 +43,10 @@ public class UserService {
         }
     }
 
-    public void register(AppUser user){
-        repo.save(user);
+    public void register(AppUser user){repo.save(user);
     }
-    //calls the appropriate repo method, depending on the newOrUpdate argument
+    //in addition to calling the update method from the user repo, this method enforces referential integrity
     public void update(AppUser beforeUpdate, AppUser user) {
-
             repo.update(user);
 
             if(user.getEdu().equals("STUDENT")){

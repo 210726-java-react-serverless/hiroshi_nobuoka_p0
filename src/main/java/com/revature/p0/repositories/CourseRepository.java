@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.List;
+
 
 public class CourseRepository implements CrudRepository<Course>{
     static final Logger logger = LogManager.getLogger(UserRepository.class);
@@ -30,6 +30,7 @@ public class CourseRepository implements CrudRepository<Course>{
 
     public CourseRepository(UserSession session){this.session = session;}
 
+    //primary means of course query for checking course availability to prevent duplication, and for student registration
     public Course findCourseByTag(String tag) throws NullPointerException{
 
             Document queryDoc = userCollection.find( new BasicDBObject("coursetag", tag)).first();
@@ -93,10 +94,12 @@ public class CourseRepository implements CrudRepository<Course>{
             return null;
         }
     }
+
+    //Deletes the user document made prior to update. Creates a new user document with updated fields.
     @Override
     public void update(Course updatedCourse) {
         ObjectId id = new ObjectId(updatedCourse.getCourseId());
-        //Delete the user document made prior to update.
+
         Document queryDoc = userCollection.find(new BasicDBObject("_id", id)).first();
         logger.info("UPDATE queryDoc contains " +queryDoc);
         if(queryDoc == null) {
@@ -104,14 +107,13 @@ public class CourseRepository implements CrudRepository<Course>{
             throw new DocumentNotFoundException();}
 
         userCollection.deleteOne(queryDoc);
-        //Create a new user document with updated fields.
+
         Document newCourseDoc = updatedCourse.toDocument();
         userCollection.insertOne(newCourseDoc);
         updatedCourse.setCourseId(newCourseDoc.get("_id").toString());
     }
-
+    //Find course by tag and add student to list of enrolled students, which is a field specific to each course
     public void registerStudentForCourse(String tag, UserSession session)throws NullPointerException{
-        //Find course and add student to list of enrolled students
         Course course = this.findCourseByTag(tag);
         String username = session.getCurrentUser().getUsername();
         if(!course.getEnrolled().contains(username)) {

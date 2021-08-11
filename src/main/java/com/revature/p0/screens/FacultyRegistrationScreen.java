@@ -33,7 +33,7 @@ public class FacultyRegistrationScreen extends Screen {
     public void render() throws Exception {
         List<Course> courses = service.getCourses(session.getCurrentUser());
         System.out.println("\n**COURSE MANAGEMENT**\n");
-        System.out.println("Below are a list of the courses you teach:");
+        System.out.println("Below are a list of the courses you teach:\n");
         for (Course course : courses)
             System.out.println(course.getCourseTag());
         String menu =

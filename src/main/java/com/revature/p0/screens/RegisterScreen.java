@@ -32,7 +32,7 @@ public class RegisterScreen extends Screen {
 
         System.out.println(menu);
 
-        //Get user input
+
         Question prompt = new NavigateScreenQuestion(2);
         String userInput = reader.readLine();
         while (!prompt.validAnswer(userInput)) {
@@ -46,7 +46,7 @@ public class RegisterScreen extends Screen {
                 router.previousScreen();
                 return;
         }
-        //Determine if student or faculty.
+        //Determine if user is student or faculty.
         EduQuestion eduQuestion = new EduQuestion(session);
         String edu = reader.readLine();
         while(!eduQuestion.validAnswer(edu)){
@@ -56,7 +56,7 @@ public class RegisterScreen extends Screen {
         String[] questionTypeArray = {"firstname", "lastname", "email", "username", "password"};
         String[] answerArray = new String[questionTypeArray.length];
 
-        //Loop through questions, store answer in answerArray.
+        //Iterate through questions, store answer in answerArray.
         for (int i = 0; i < questionTypeArray.length; i++) {
             Question question = qFactory.getQuestion(questionTypeArray[i],service);
             String answer = reader.readLine();
@@ -64,13 +64,14 @@ public class RegisterScreen extends Screen {
             answerArray[i] = answer;
         }
 
+
             AppUser newUser = service.createAppUser(answerArray);
             logger.info("new user "+ newUser.getUsername()+" instantiation complete");
 
             service.register(newUser);
             System.out.println("Registration successful!");
 
-            //navigate to appropriate dashboard
+
             if(newUser.getEdu().equals("STUDENT"))
                 router.navigate("/sdash");
             else

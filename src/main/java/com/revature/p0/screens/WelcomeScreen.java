@@ -28,7 +28,7 @@ public class WelcomeScreen extends Screen{
                 "2) Register\n"+
                 "3) Exit\n";
         System.out.print(menu);
-
+        //This validates user input
         NavigateScreenQuestion askUserInput = new NavigateScreenQuestion(3);
         String userInput = reader.readLine();
         while(!askUserInput.validAnswer(userInput)){

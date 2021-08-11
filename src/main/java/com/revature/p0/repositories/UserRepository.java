@@ -29,8 +29,8 @@ public class UserRepository implements CrudRepository<AppUser>{
         this.session = session;
     }
 
+    //implementation for login validation
     public AppUser findUserByCredentials(String username, String password){
-
         try{
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
             Document queryDoc = new Document("username", username).append("password", password);
@@ -53,7 +53,7 @@ public class UserRepository implements CrudRepository<AppUser>{
         }
     }
 
-
+    //checks to see if username already exists in repo
     public AppUser findUserByUsername(String username){
         try {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
@@ -73,7 +73,7 @@ public class UserRepository implements CrudRepository<AppUser>{
             return null;
         }
     }
-
+    //checks if email exists in repo
     public AppUser findUserByEmail(String email) {
         try {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
@@ -96,10 +96,9 @@ public class UserRepository implements CrudRepository<AppUser>{
             return null;
         }
     }
-
+    //Refers to the active user's education (i.e. student vs faculty) to determine which collection to query
     public MongoCollection<Document> chooseCollection(MongoDatabase db){
         try {
-            //Refers to the active user's education to determine which collection to query
             if (session.getEducation().equals(AppUser.EDU.STUDENT)){
                 logger.info("Student collection accessed");
                 return db.getCollection("student");
@@ -114,7 +113,7 @@ public class UserRepository implements CrudRepository<AppUser>{
         return null;
     }
 
-
+    //my Course model requires an AppUser(i.e. faculty) instance to be passed as an argument for its constructor. Used in most cases where a course needs to be made.
     public static AppUser findInstructorById(String id) throws NullPointerException {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
             MongoDatabase projectDb = mongoClient.getDatabase("ProjectZero");
@@ -134,20 +133,24 @@ public class UserRepository implements CrudRepository<AppUser>{
 
     }
 
+    /**
+     * Checks to make sure the user we're trying to persist doesn't already exist in the repo. Then it converts the user to a
+     * document, saves it to the repo, and gives the user the database-generated ID using a setter.
+     */
     @Override
     public void save(AppUser newUser) {
         try {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
-            //Double check to make sure user does not already exist in database.
+
             Document queryDoc = userCollection.find(new BasicDBObject("_id", newUser.getId())).first();
             if(queryDoc != null) {
                 throw new RuntimeException(newUser.getId()+" already exists in "+userCollection.toString());
             }
-            //Create user document and save to database.
+
             Document newUserDoc = newUser.toDocument();
             userCollection.insertOne(newUserDoc);
 
-            //Query the doc we just saved and obtain the user ID
+
             Document getIDDoc = userCollection.find(new BasicDBObject("username", newUser.getUsername())).first();
             newUser.setId(getIDDoc.get("_id").toString());
             logger.info("username "+newUser.getUsername()+" saved to "+userCollection.getNamespace()+" with id "+newUser.getId());
@@ -158,20 +161,20 @@ public class UserRepository implements CrudRepository<AppUser>{
             throw new DataSourceException("An unexpected exception occurred.", e);
             }
         }
-
+    //Deletes the user persistence created prior to changes being made, then persists the user with the changes applied
     @Override
     public void update(AppUser updatedUser) {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
             logger.info(updatedUser.getId());
             ObjectId id = new ObjectId(updatedUser.getId());
-            //Delete the user document made prior to update.
+
             Document queryDoc = userCollection.find(new BasicDBObject("_id", id)).first();
 
             if(queryDoc == null) {
                 throw new DocumentNotFoundException();
             }
             userCollection.deleteOne(queryDoc);
-            //Create a new user document with updated fields.
+
             Document newUserDoc = updatedUser.toDocument();
             logger.debug(newUserDoc.toJson());
             userCollection.insertOne(newUserDoc);
