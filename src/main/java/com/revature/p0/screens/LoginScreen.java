@@ -44,7 +44,7 @@ public class LoginScreen extends Screen {
             case "1":
                 break;
             case "2":
-                router.previousScreen();
+                router.navigate("/welcome");
                 return;
         }
 
