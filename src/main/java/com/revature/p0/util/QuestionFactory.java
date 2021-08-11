@@ -36,7 +36,6 @@ public class QuestionFactory {
         if(type.equals("username"))
             return new UsernameQuestion(service);
         else {
-            //TODO log here
             throw new IllegalArgumentException("Cannot find question of " + type + " type");
         }
     }

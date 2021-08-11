@@ -32,10 +32,11 @@ public class FacultyRegistrationScreen extends Screen {
     @Override
     public void render() throws Exception {
         List<Course> courses = service.getCourses(session.getCurrentUser());
+        System.out.println("\n**COURSE MANAGEMENT**\n");
         System.out.println("Below are a list of the courses you teach:");
         for (Course course : courses)
             System.out.println(course.getCourseTag());
-        String menu = "You're on the faculty course management screen.\n" +
+        String menu =
                 "1)Create a course\n" +
                 "2)Remove a course\n" +
                 "3)Update course info\n" +
@@ -100,7 +101,7 @@ public class FacultyRegistrationScreen extends Screen {
 
         System.out.println(currentInfo);
         String menu = "\nPlease select the item you wish to update: \n" +
-                "1)Course Name\t  2)Course Tag\t 3)Registration Deadline\t 4)Back";
+                "1)Course Name\t  2)Course Tag\t 3)Registration Deadline\t 4)Back"; //TODO implement registration deadline
         System.out.println(menu);
         try {
             NavigateScreenQuestion prompt = new NavigateScreenQuestion(4);
@@ -110,7 +111,7 @@ public class FacultyRegistrationScreen extends Screen {
 
             String[] questionTypeArray = {"coursename", "coursetag"};
             if (userInput.equals("4"))
-                router.previousScreen();
+                router.navigate("/login");
             else {
                 Question question = qFactory.getCourseQuestion(questionTypeArray[Integer.parseInt(userInput) - 1], service);
                 String answer = reader.readLine();

@@ -61,7 +61,7 @@ public class CourseRepository implements CrudRepository<Course>{
             logger.info("course "+newCourse.getCourseTag()+" saved to "+userCollection.getNamespace()+" with id "+newCourse.getCourseId());
 
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            e.printStackTrace();
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }

@@ -31,7 +31,7 @@ public class LoginScreen extends Screen {
     @Override
     public void render() throws Exception {
 
-        String menu = "User Login\n" +
+        String menu = "**LOGIN SCREEN*\n" +
                 "1) Login\n" +
                 "2) Go Back\n";
         System.out.println(menu);

@@ -52,7 +52,7 @@ public class StudentDashboard extends Screen{
                 router.navigate("/update");
                 break;
             case "4":
-                router.previousScreen();
+                router.navigate("/login");
         }
     }
 }

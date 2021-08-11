@@ -17,7 +17,7 @@ public class FacultyDashboard extends Screen{
 
     @Override
     public void render() throws Exception {
-        System.out.println("You are on the Faculty Dashboard.\n");
+        System.out.println("\n**FACULTY DASHBOARD**\n");
         String menu = "1)Create/delete a course\n"+
                 "2)Update personal info\n"+
                 "3)Back\n";

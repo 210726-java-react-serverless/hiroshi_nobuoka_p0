@@ -40,6 +40,4 @@ public class ScreenRouter{
 
         public Screen getCurrentScreen(){return currentScreen;};
 
-        //TODO (optional) implement methods for history
-
 }

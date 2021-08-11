@@ -45,10 +45,10 @@ public class UserRepository implements CrudRepository<AppUser>{
             return user;
 
         } catch (NullPointerException npe){
-            npe.printStackTrace(); //TODO log this
+            npe.printStackTrace();
             throw new DataSourceException("An Exception occurred during query.", npe);
         } catch (Exception e){
-            e.printStackTrace(); //TODO log this
+            e.printStackTrace();
             throw new DataSourceException("An unknown exception occurred", e);
         }
     }
@@ -109,7 +109,7 @@ public class UserRepository implements CrudRepository<AppUser>{
                 return db.getCollection("faculty");
             }
         } catch (NullPointerException npe){
-            npe.printStackTrace();//TODO log, include message that database returns null
+            npe.printStackTrace();
         }
         return null;
     }
@@ -154,7 +154,7 @@ public class UserRepository implements CrudRepository<AppUser>{
 
 
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            e.printStackTrace();
             throw new DataSourceException("An unexpected exception occurred.", e);
             }
         }

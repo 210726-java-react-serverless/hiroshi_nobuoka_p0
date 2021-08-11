@@ -34,7 +34,7 @@ public class UpdateScreen extends Screen{
 
     public void render() throws Exception{
         AppUser beforeUpdate = session.getCurrentUser();
-
+        System.out.println("**USER UPDATE**\n");
         String currentInfo = "First name: "+beforeUpdate.getFirstName()+"\t"
                 +"Last name: "+beforeUpdate.getLastName()+"\n"
                 +"ID: "+beforeUpdate.getId()+"\t"

@@ -16,7 +16,6 @@ public class UsernameQuestion extends Question {
     @Override
     public boolean validAnswer(String answer){
         if(answer.trim().equals("")||answer.isEmpty()) {
-            //TODO include Log for answer
             System.out.println("Cannot be empty. Try again: ");
             return false;
         }

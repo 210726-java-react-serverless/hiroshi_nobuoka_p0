@@ -27,7 +27,7 @@ public class RegisterScreen extends Screen {
     }
 
     public void render() throws Exception {
-        String menu = "You're on the register screen. \n"
+        String menu = "**USER REGISTRATION**"
                 + "\n 1)Register \t 2)Return";
 
         System.out.println(menu);
