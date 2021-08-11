@@ -26,6 +26,13 @@ public class CourseTagQuestion extends Question {
         return true;
     }
 
+    public boolean validAnswer(String answer, String delete){
+        if(service.courseTagAvailable(answer)){
+            System.out.println("Course tag does not exist. Please try again: ");
+            return false;
+        } return true;
+    }
+
     public String getQuestion() {
         return question;
     }

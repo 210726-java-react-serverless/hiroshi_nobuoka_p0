@@ -1,9 +1,9 @@
 package com.revature.p0.services;
 
-import com.revature.p0.documents.AppUser;
+
 import com.revature.p0.documents.Course;
 import com.revature.p0.repositories.CourseRepository;
-import com.revature.p0.repositories.UserRepository;
+
 import com.revature.p0.util.UserSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +19,7 @@ public class CourseService {
     }
 
     public Course createCourse(String[] answerArray) throws ArrayIndexOutOfBoundsException{
-        Course course = new Course(answerArray[0], answerArray[1], session.getCurrentUser().toString());
+        Course course = new Course(answerArray[0], answerArray[1], session.getCurrentUser());
         return course;
     }
     public void registerCourse(Course course, String newOrUpdate) {
@@ -36,9 +36,13 @@ public class CourseService {
     }
 
     public boolean courseTagAvailable(String tag){
-        if(repo.findCourseByTag(tag) == null)
+        try {
+            repo.findCourseByTag(tag);
+            return false;
+        }catch (NullPointerException npe){
+            logger.info("Course tag "+tag+ " is available.");
             return true;
-        return false;
+        }
     }
 
 

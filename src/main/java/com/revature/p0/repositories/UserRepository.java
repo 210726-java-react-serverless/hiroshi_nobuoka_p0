@@ -63,8 +63,13 @@ public class UserRepository implements CrudRepository<AppUser>{
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
             Document queryDoc = userCollection.find(new BasicDBObject("username", username)).first();
-            AppUser queriedUser = new AppUser(AppUser.EDU.fromString(queryDoc.get("edu").toString()), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
-                    queryDoc.get("username").toString(), queryDoc.get("password").toString());
+            AppUser queriedUser = new AppUser(AppUser.EDU.fromString(queryDoc.get("edu").toString()),
+                    queryDoc.get("_id").toString(),
+                    queryDoc.get("firstName").toString(),
+                    queryDoc.get("lastName").toString(),
+                    queryDoc.get("email").toString(),
+                    queryDoc.get("username").toString(),
+                    queryDoc.get("password").toString());
             return queriedUser;
 
         } catch (NullPointerException npe){
@@ -80,8 +85,13 @@ public class UserRepository implements CrudRepository<AppUser>{
             BasicDBObject name = new BasicDBObject("email", email);
             Document queryDoc = userCollection.find(name).first();
 
-            AppUser queriedUser= new AppUser(AppUser.EDU.fromString(queryDoc.get("edu").toString()), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
-                    queryDoc.get("username").toString(), queryDoc.get("password").toString());
+            AppUser queriedUser= new AppUser(AppUser.EDU.fromString(queryDoc.get("edu").toString()),
+                    queryDoc.get("_id").toString(),
+                    queryDoc.get("firstName").toString(),
+                    queryDoc.get("lastName").toString(),
+                    queryDoc.get("email").toString(),
+                    queryDoc.get("username").toString(),
+                    queryDoc.get("password").toString());
             return queriedUser;
 
 
@@ -108,26 +118,30 @@ public class UserRepository implements CrudRepository<AppUser>{
         return null;
     }
 
-    @Override
-    public AppUser findById(String id) {
-        try {
-            MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
-            Document queryDoc = userCollection.find(new BasicDBObject("_id", id)).first();//TODO key may be incorrect, make sure to test
-            AppUser queriedUser= new AppUser(AppUser.EDU.fromString(queryDoc.get("edu").toString()), queryDoc.get("firstName").toString(), queryDoc.get("lastName").toString(), queryDoc.get("email").toString(),
-                    queryDoc.get("username").toString(), queryDoc.get("password").toString());
+    public static AppUser findInstructorById(String id) throws NullPointerException {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            MongoDatabase projectDb = mongoClient.getDatabase("ProjectZero");
+            MongoCollection<Document> userCollection = projectDb.getCollection("faculty");
+
+            ObjectId workingId = new ObjectId(id);
+            Document queryDoc = userCollection.find(new BasicDBObject("_id", workingId)).first();
+
+            AppUser queriedUser= new AppUser(AppUser.EDU.fromString(queryDoc.get("edu").toString()),
+                    queryDoc.get("_id").toString(),
+                    queryDoc.get("firstName").toString(),
+                    queryDoc.get("lastName").toString(),
+                    queryDoc.get("email").toString(),
+                    queryDoc.get("username").toString(),
+                    queryDoc.get("password").toString());
             return queriedUser;
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-            throw new DataSourceException("Database or collection not found", npe);
-        }
     }
 
     @Override
     public void save(AppUser newUser) {
         try {
             MongoCollection<Document> userCollection = chooseCollection(projectDb);
-            //Check to make sure user does not already exist in database.
+            //Double check to make sure user does not already exist in database.
             Document queryDoc = userCollection.find(new BasicDBObject("_id", newUser.getId())).first();
             if(queryDoc != null) {
                 throw new RuntimeException(newUser.getId()+" already exists in "+userCollection.toString());
@@ -171,7 +185,7 @@ public class UserRepository implements CrudRepository<AppUser>{
     public void delete(String username) {
         MongoCollection<Document> userCollection = chooseCollection(projectDb);
 
-        userCollection.deleteOne(Filters.eq("uesrname", username));
+        userCollection.deleteOne(Filters.eq("username", username));
         System.out.println("Document deleted successfully.");
     }
 

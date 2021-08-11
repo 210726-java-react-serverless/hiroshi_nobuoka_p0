@@ -19,7 +19,7 @@ public class CourseNameQuestion extends Question {
             System.out.println("Cannot be empty.");
             return false;
         }
-        if(!answer.matches("^[a-z ]*$")) {
+        if(!answer.matches("^[a-zA-Z0-9_ ]*$")) {
             System.out.println("Only names with English letters are considered valid. Please try again.");
             return false;
         }

@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
+import com.revature.p0.documents.AppUser;
 import com.revature.p0.documents.Course;
 import com.revature.p0.exceptions.DataSourceException;
 import com.revature.p0.util.MongoClientFactory;
@@ -28,20 +29,15 @@ public class CourseRepository implements CrudRepository<Course>{
         this.session = session;
     }
 
-    public Course findCourseByTag(String tag) {
-        try {
+    public Course findCourseByTag(String tag) throws NullPointerException{
+
             MongoCollection<Document> userCollection = projectDb.getCollection("courses");
 
+            Document queryDoc = userCollection.find( new BasicDBObject("coursetag", tag)).first();
+            AppUser instructor = UserRepository.findInstructorById(queryDoc.get("instructorId").toString());
 
-            Document queryDoc = userCollection.find( new BasicDBObject("tag", tag)).first();
-
-            Course queriedCourse= new Course(queryDoc.get("tag").toString(), queryDoc.get("coursename").toString(),queryDoc.get("instructor").toString());
+            Course queriedCourse= new Course(queryDoc.get("_id").toString(),queryDoc.get("coursetag").toString(), queryDoc.get("coursename").toString(),instructor);
             return queriedCourse;
-
-        } catch (NullPointerException npe) {
-            logger.info("Course tag not found in database");
-            return null;
-        }
     }
 
 
@@ -72,14 +68,16 @@ public class CourseRepository implements CrudRepository<Course>{
     public void delete(String courseTag) {
         try {
             MongoCollection<Document> userCollection = projectDb.getCollection("courses");
-            Course queryCourse = this.findCourseByTag(courseTag);
-            logger.info("Queried course name is " + queryCourse.toString());
-            if (queryCourse.getInstructor().equals(session.getCurrentUser().toString())) {
-                userCollection.deleteOne(Filters.eq("coursetag", courseTag));
+            Course queryCourse = findCourseByTag(courseTag);
+            logger.info("Found course "+queryCourse.getCourseTag()+" for delete() call");
+            //making sure the instructor requesting course removal is the instructor for that course
+            if (queryCourse.getInstructorId().equals(session.getCurrentUser().getId())) {
+                userCollection.deleteOne(queryCourse.toDocument());
                 System.out.println("Course " + courseTag + "removed, successfully.");
             } else
-                System.out.println("Course is registered under "+session.getCurrentUser().toString()+". Permission to remove course, denied.");
-        }catch(NullPointerException npe){
+                System.out.println("Course is registered under "+session.getCurrentUser().getUsername()+". Permission to remove course, denied.");
+        }catch (NullPointerException npe){
+            npe.printStackTrace();
             System.out.println("Course tag not found");
         }
     }
@@ -88,9 +86,7 @@ public class CourseRepository implements CrudRepository<Course>{
     public void update(Course updatedCourse) {
 
     }
-    @Override
-    public Course findById(String id) {
-        return null;
-    }
+
+
 
 }

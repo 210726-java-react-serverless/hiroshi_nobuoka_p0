@@ -23,7 +23,7 @@ public class FacultyDashboard extends Screen{
                 "3)Back\n";
         System.out.println(menu);
 
-        NavigateScreenQuestion prompt = new NavigateScreenQuestion(4);
+        NavigateScreenQuestion prompt = new NavigateScreenQuestion(3);
         String userInput = reader.readLine();
         while(!prompt.validAnswer(userInput))
             userInput = reader.readLine();

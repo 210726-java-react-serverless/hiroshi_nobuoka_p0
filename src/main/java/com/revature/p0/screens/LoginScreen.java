@@ -33,8 +33,7 @@ public class LoginScreen extends Screen {
 
         String menu = "User Login\n" +
                 "1) Login\n" +
-                "2) Go Back\n" +
-                ">";
+                "2) Go Back\n";
         System.out.println(menu);
         NavigateScreenQuestion askUserInput = new NavigateScreenQuestion(2);
         String userInput = reader.readLine();

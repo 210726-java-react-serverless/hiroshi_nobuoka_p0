@@ -3,7 +3,7 @@ package com.revature.p0.screens;
 
 import com.revature.p0.questions.NavigateScreenQuestion;
 import com.revature.p0.questions.Question;
-import com.revature.p0.services.UserService;
+import com.revature.p0.services.CourseService;
 
 import com.revature.p0.util.ScreenRouter;
 import com.revature.p0.util.UserSession;
@@ -14,10 +14,10 @@ import java.io.BufferedReader;
 
 public class StudentRegistrationScreen extends Screen{
     static final Logger logger = LogManager.getLogger(RegisterScreen.class);
-    private final UserService service;
+    private final CourseService service;
     private UserSession session;
 
-    public StudentRegistrationScreen(BufferedReader reader, ScreenRouter router, UserService service, UserSession session){
+    public StudentRegistrationScreen(BufferedReader reader, ScreenRouter router, CourseService service, UserSession session){
         super("Student Registration Screen", "/sreg",reader,router);
         this.service = service;
         this.session = session;

@@ -12,21 +12,35 @@ public class Course {
     private String courseTag;
     private String courseName;
     private String instructor;
+    private String instructorId;
     private List<String> enrolled = new ArrayList<>();
 
-    public Course(String courseTag, String courseName, String instructor) {
+    public Course(String courseTag, String courseName, AppUser instructor) {
         this.courseTag = courseTag;
         this.courseName = courseName;
-        this.instructor = instructor;
+        this.instructor = instructor.getFirstName()+" "+instructor.getLastName();
+        this.instructorId = instructor.getId();
     }
 
+    public Course(String courseId, String courseTag, String courseName, AppUser instructor) {
+        this.courseId = courseId;
+        this.courseTag = courseTag;
+        this.courseName = courseName;
+        this.instructor = instructor.getFirstName()+" "+instructor.getLastName();
+        this.instructorId = instructor.getId();
+    }
     public Document toDocument(){
         Document newUserDoc = new Document("coursetag", this.getCourseTag())
                 .append("coursename", this.getCourseName())
                 .append("instructor", this.getInstructor())
+                .append("instructorId", this.getInstructorId())
                 .append("enrolled", this.getEnrolled());
         return newUserDoc;
     }
+
+    public String getInstructorId() {return instructorId;}
+
+    public void setInstructorId(String instructorId) {this.instructorId = instructorId;}
 
     public String getCourseId() {
         return courseId;
