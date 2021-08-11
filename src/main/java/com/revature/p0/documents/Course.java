@@ -81,17 +81,18 @@ public class Course {
         this.enrolled = enrolled;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return enrolled == course.enrolled && Objects.equals(courseId, course.courseId) && Objects.equals(courseTag, course.courseTag) && Objects.equals(courseName, course.courseName) && Objects.equals(instructor, course.instructor);
+        return Objects.equals(courseId, course.courseId) && Objects.equals(courseTag, course.courseTag) && Objects.equals(courseName, course.courseName) && Objects.equals(instructor, course.instructor) && Objects.equals(instructorId, course.instructorId) && Objects.equals(enrolled, course.enrolled);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseId, courseTag, courseName, instructor, enrolled);
+        return Objects.hash(courseId, courseTag, courseName, instructor, instructorId, enrolled);
     }
 
     @Override

@@ -31,14 +31,16 @@ public class FacultyRegistrationScreen extends Screen {
 
     @Override
     public void render() throws Exception {
-        String courseList = "List courses here\n";
+        List<Course> courses = service.getCourses(session.getCurrentUser());
+        System.out.println("Below are a list of the courses you teach:");
+        for (Course course : courses)
+            System.out.println(course.getCourseTag());
         String menu = "You're on the course management screen.\n" +
                 "1)Create a course\n" +
                 "2)Remove a course\n" +
                 "3)Update course info\n" +
                 "4)Back\n";
 
-        System.out.println(courseList);
         System.out.println(menu);
 
         Question prompt = new NavigateScreenQuestion(4);
@@ -75,19 +77,14 @@ public class FacultyRegistrationScreen extends Screen {
                     service.removeCourse(tag);
                 break;
             case "3":
-                List<Course> courses = service.getCourses(session.getCurrentUser());
-                System.out.println("Below are a list of the courses you teach:");
-                for (Course course : courses)
-                    System.out.println(course.getCourseTag());
                 System.out.println("Please enter the tag of the course you would like to edit. ");
                 String answer = reader.readLine();
                 Course updateCourse = service.returnCourseByTag(answer);
+                logger.info(updateCourse);
                 if (courses.contains(updateCourse)) {
                     changeCourseDetails(updateCourse);
-
-
-                }
-
+                } else
+                    System.out.println("Invalid tag entered.");
                 break;
             case "4":
                 router.previousScreen();
@@ -95,14 +92,14 @@ public class FacultyRegistrationScreen extends Screen {
     }
 
     public void changeCourseDetails(Course course) {
-        String currentInfo = "Course ID: " + course.getCourseId() + "\t" +
+        String currentInfo = "Course ID: " + course.getCourseId() + "\n" +
                 "Course name: " + course.getCourseName() + "\t"
                 + "Course Tag: " + course.getCourseTag() + "\n"
                 + "Instructor: " + course.getInstructor();
 
 
         System.out.println(currentInfo);
-        String menu = "Please select the item you wish to update: \n" +
+        String menu = "\nPlease select the item you wish to update: \n" +
                 "1)Course Name\t  2)Course Tag\t 3)Registration Deadline\t 4)Back";
         System.out.println(menu);
         try {
@@ -111,7 +108,7 @@ public class FacultyRegistrationScreen extends Screen {
             while (!prompt.validAnswer(userInput))
                 userInput = reader.readLine();
 
-            String[] questionTypeArray = {"coursename", "coursetag", ""};
+            String[] questionTypeArray = {"coursename", "coursetag"};
             if (userInput.equals("4"))
                 router.previousScreen();
             else {
